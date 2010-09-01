@@ -1,0 +1,73 @@
+--- !ruby/object:Gem::Specification 
+name: iq_rdf
+version: !ruby/object:Gem::Version 
+  version: 0.0.6
+platform: ruby
+authors: 
+  - Till Schulte-Coerne (innoQ Deutschland GmbH) for the Federal Environment Agency of Germany
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-04-16 00:00:00 +02:00
+default_executable: 
+dependencies: []
+
+description: IqRdf - A RDF generator for Ruby and Rails
+email: till.schulte-coerne@innoq.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+  - README
+  - LICENSE
+files: 
+  - LICENSE
+  - README
+  - Rakefile
+  - lib/iq_rdf.rb
+  - lib/iq_rdf/blank_node.rb
+  - lib/iq_rdf/collection.rb
+  - lib/iq_rdf/document.rb
+  - lib/iq_rdf/literal.rb
+  - lib/iq_rdf/namespace.rb
+  - lib/iq_rdf/node.rb
+  - lib/iq_rdf/plain_turtle_literal.rb
+  - lib/iq_rdf/predicate.rb
+  - lib/iq_rdf/predicate_namespace.rb
+  - lib/iq_rdf/uri.rb
+  - lib/iq_rdf/rails/rdf.rb
+  - rails/init.rb
+  - test/iq_rdf_test.rb
+  - test/test_helper.rb
+has_rdoc: true
+homepage: 
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+  - lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: IqRdf - A RDF generator for Ruby and Rails
+test_files: []
+
