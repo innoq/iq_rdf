@@ -7,7 +7,7 @@ require 'rake/testtask'
 
 spec = Gem::Specification.new do |s|
   s.name = 'iq_rdf'
-  s.version = '0.0.6'
+  s.version = '0.0.9'
   s.has_rdoc = true
   s.extra_rdoc_files = ['README', 'LICENSE']
   s.summary = 'IqRdf - A RDF generator for Ruby and Rails'

@@ -12,6 +12,11 @@ require 'iq_rdf/document'
 
 require 'uri'
 
+if defined?(ActionView::Template)
+  require 'iq_rdf/rails/iq_rdf'
+  ActionView::Template.register_template_handler('iqrdf', ActionView::TemplateHandlers::IqRdf)
+end
+
 # The main module of IqRdf.
 module IqRdf
 

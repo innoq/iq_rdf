@@ -17,7 +17,8 @@ module IqRdf
       elsif @obj.is_a?(Numeric)
         @obj.to_s
       else
-        "\"#{@obj.to_s.gsub(/"/, "\\\"")}\"#{(lang && lang != :none) ? "@#{lang}" : ""}"
+        quote = @obj.to_s.include?("\n") ? '"""' : '"'
+        "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{(lang && lang != :none) ? "@#{lang}" : ""}"
       end
     end
 

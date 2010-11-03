@@ -1,6 +1,6 @@
 module ActionView::TemplateHandlers
 
-  class RDF < ActionView::TemplateHandler
+  class IqRdf < ActionView::TemplateHandler
     include ActionView::TemplateHandlers::Compilable
 
     def compile(template)

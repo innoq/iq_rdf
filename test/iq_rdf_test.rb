@@ -115,7 +115,8 @@ rdf
       t.age(32)
       t.married(false)
       t.weight(65.8)
-      t.quotes("\"I'm quoted\"")
+      t.quotes("\"I'm \\quoted\"")
+      t.line_breaks("I'm written\nover two lines")
       t.some_literal(IqRdf::Literal.new("text", :de))
       t.messy(IqRdf::PlainTurtleLiteral.new('"this_already_is_in_turtle_format"@en'))
     end
@@ -131,7 +132,9 @@ rdf
            :age 32;
            :married false;
            :weight 65.8;
-           :quotes "\\"I'm quoted\\""@de;
+           :quotes "\\"I'm \\\\quoted\\""@de;
+           :line_breaks """I'm written
+over two lines"""@de;
            :some_literal "text"@de;
            :messy "this_already_is_in_turtle_format"@en.
 rdf
