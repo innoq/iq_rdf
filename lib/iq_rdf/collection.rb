@@ -15,5 +15,25 @@ module IqRdf
       "(#{@elements.map{|e| e.to_s(lang)}.join(" ")})"
     end
 
+    def build_xml(xml, elements = nil, &block)
+      elements ||= @elements.dup
+      block.call({},
+        lambda {
+          xml.rdf :List do
+            elements.shift.build_xml(xml) do |*args|
+              xml.rdf(:first, *args)
+            end
+            if elements.size > 0
+              build_xml(xml, elements) do |opts, block|
+                xml.rdf :rest, &block
+              end
+            else
+              xml.rdf :rest, "rdf:resource" => Rdf.nil.full_uri
+            end
+          end
+        }
+      )
+    end
+
   end
 end

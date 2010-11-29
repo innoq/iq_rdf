@@ -13,9 +13,8 @@ Gem::Specification.new do |s|
   s.description = s.summary
   s.extra_rdoc_files = ['README.rdoc', 'LICENSE']
   
-  s.add_dependency "activerecord"
-  s.add_dependency "rails"
   s.add_dependency "bundler"
+  s.add_dependency "builder"
 
   s.files = %w(LICENSE README.rdoc Rakefile) + Dir.glob("{lib,rails,test}/**/*")
   s.files = Dir.glob("{test}/**/*")

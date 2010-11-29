@@ -14,7 +14,7 @@ module IqRdf
 
     def full_uri(parent_lang = nil)
       # URI::join etc won't work since uri_postfix has not to be a valid URI itself.
-      "<#{self.namespace.uri_prefix.to_s}#{self.uri_postfix.to_s}>"
+      "#{self.namespace.uri_prefix.to_s}#{self.uri_postfix.to_s}"
     end
 
     def to_s(parent_lang = nil)
@@ -32,6 +32,23 @@ module IqRdf
         end
       end
       return !rdf_type.nil?
+    end
+
+    def build_xml(xml, &block)
+      if (is_subject?)
+        attrs = {"rdf:about" => self.full_uri}
+        attrs["xml:lang"] = self.lang if self.lang
+        xml.rdf(:Description, attrs) do
+          if self.rdf_type
+            xml.rdf(:type, "rdf:resource" => self.rdf_type.full_uri)
+          end
+          self.nodes.each do |predicate|
+            predicate.build_xml(xml)
+          end
+        end
+      elsif block
+        block.call("rdf:resource" => self.full_uri)
+      end
     end
 
   end

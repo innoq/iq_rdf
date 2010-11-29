@@ -10,6 +10,8 @@ require 'iq_rdf/collection'
 require 'iq_rdf/predicate_namespace'
 require 'iq_rdf/document'
 
+require 'builder'
+
 require 'uri'
 
 if defined?(ActionView::Template)

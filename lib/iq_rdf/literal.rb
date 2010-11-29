@@ -22,6 +22,16 @@ module IqRdf
       end
     end
 
+    def build_xml(xml, &block)
+      if @obj.is_a?(URI)
+        block.call("rdf:resource" => @obj.to_s)
+      else
+        opts = {}
+        opts[:lang] = @lang if @lang
+        block.call(@obj.to_s, @opts)
+      end
+    end
+
     alias_method :full_uri, :to_s
 
   end

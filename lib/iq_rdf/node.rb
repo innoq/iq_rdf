@@ -35,5 +35,9 @@ module IqRdf
       IqRdf::PredicateNamespace.new(self, Namespace.dummy_empty_namespace).build_predicate(uri, *args, &block)
     end
 
+    def xml_lang
+      @lang && (@lang == :none ? "" : @lang)
+    end
+
   end
 end

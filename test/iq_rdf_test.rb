@@ -27,8 +27,8 @@ class IqRdfTest < Test::Unit::TestCase
 
     IqRdf::Innoq::tillsc
 
-    assert_equal("<http://default-namespace.com/foo>", IqRdf::foo.full_uri)
-    assert_equal("<http://www.innoq.com/tillsc>", IqRdf::Innoq::tillsc.full_uri)
+    assert_equal("http://default-namespace.com/foo", IqRdf::foo.full_uri)
+    assert_equal("http://www.innoq.com/tillsc", IqRdf::Innoq::tillsc.full_uri)
   end
 
   def test_disallow_nested_definitions

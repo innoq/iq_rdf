@@ -52,6 +52,23 @@ module IqRdf
       s
     end
 
+    def to_xml
+      xml = Builder::XmlMarkup.new(:indent => 2)
+      xml.instruct!
+      opts = {}
+      @namespaces.values.each{ |namespace|
+        opts[namespace.token == :default ? "xmlns" : "xmlns:#{namespace.token.to_s}"] = namespace.uri_prefix
+      }
+      opts["xml:lang"] = @document_language if @document_language
+
+      xml.rdf(:RDF, opts) do
+        @nodes.each do |node|
+          node.build_xml(xml)
+        end
+      end
+      xml.target!
+    end
+
     private
 
     def register_namespace(name, uri_prefix)
