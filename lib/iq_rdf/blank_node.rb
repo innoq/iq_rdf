@@ -20,5 +20,17 @@ module IqRdf
       IqRdf::PredicateNamespace.new(self, IqRdf::Default).build_predicate(*args, &block)
     end
 
+    def build_xml(xml, &block)
+      block.call({}, lambda {
+          attrs = {}
+          attrs["xml:lang"] = self.lang if self.lang
+          xml.rdf(:Description, attrs) do
+            self.nodes.each do |predicate|
+              predicate.build_xml(xml)
+            end
+          end
+        })
+    end
+
   end
 end

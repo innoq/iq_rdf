@@ -27,8 +27,15 @@ module IqRdf
         block.call("rdf:resource" => @obj.to_s)
       else
         opts = {}
-        opts[:lang] = @lang if @lang
-        block.call(@obj.to_s, @opts)
+        { Integer => "http://www.w3.org/2001/XMLSchema#integer",
+          Float => "http://www.w3.org/2001/XMLSchema#decimal",
+          TrueClass => "http://www.w3.org/2001/XMLSchema#boolean",
+          FalseClass => "http://www.w3.org/2001/XMLSchema#boolean",
+        }.each do |klass, s|
+          opts["rdf:datatype"] = s if @obj.is_a?(klass)
+        end
+        opts["xml:lang"] = @lang if @lang
+        block.call(@obj.to_s, opts)
       end
     end
 

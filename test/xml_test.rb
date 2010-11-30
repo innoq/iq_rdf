@@ -13,12 +13,12 @@ class XmlTest < Test::Unit::TestCase
     end
 
     assert_equal(<<rdf, document.to_xml)
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<rdf:RDF xmlns=\"http://www.test.de/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" xml:lang=\"de\">
-  <rdf:Description rdf:about=\"http://www.test.de/testemann\">
-    <foaf:knows rdf:resource=\"http://www.test.de/testefrau\"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xml:lang="de">
+  <rdf:Description rdf:about="http://www.test.de/testemann">
+    <foaf:knows rdf:resource="http://www.test.de/testefrau"/>
     <foaf:nick>Testy</foaf:nick>
-    <foaf:lastname xml:lang=\"\">Testemann</foaf:lastname>
+    <foaf:lastname xml:lang="">Testemann</foaf:lastname>
   </rdf:Description>
 </rdf:RDF>
 rdf
@@ -48,35 +48,33 @@ rdf
 
       end # .
     end
-
-=begin
     document << IqRdf::Skos::testnode.test32 do |blank_node| # Blank nodes # skos:testnode :test32 [
       blank_node.title("dies ist ein test") # :title "dies ist ein test"@de;
       blank_node.sub do |subnode| # sub [
         subnode.title("blubb") # title "blubb"
       end # ]
     end # ]
-=end
+
     assert_equal(<<rdf, document.to_xml)
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<rdf:RDF xmlns=\"http://www.umweltprobenbank.de/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:skos=\"http://www.w3.org/2008/05/skos#\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" xmlns:upb=\"http://www.upb.de/\" xml:lang=\"de\">
-  <rdf:Description rdf:about=\"http://www.umweltprobenbank.de/testemann\">
-    <myCustomNote xml:lang=\"en\">This is an example</myCustomNote>
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns="http://www.umweltprobenbank.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2008/05/skos#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:upb="http://www.upb.de/" xml:lang="de">
+  <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
+    <myCustomNote xml:lang="en">This is an example</myCustomNote>
   </rdf:Description>
-  <rdf:Description rdf:about=\"http://www.umweltprobenbank.de/testemann\">
-    <rdf:type rdf:resource=\"http://xmlns.com/foaf/0.1/Person\"/>
-    <foaf:name xml:lang=\"\">Heinz Peter Testemann</foaf:name>
+  <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    <foaf:name xml:lang="">Heinz Peter Testemann</foaf:name>
   </rdf:Description>
-  <rdf:Description rdf:about=\"http://www.umweltprobenbank.de/testemann\">
-    <foaf:knows rdf:resource=\"http://www.umweltprobenbank.de/testefrau\"/>
+  <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
+    <foaf:knows rdf:resource="http://www.umweltprobenbank.de/testefrau"/>
   </rdf:Description>
-  <rdf:Description rdf:about=\"http://www.umweltprobenbank.de/testemann\">
+  <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
     <foaf:nick>Crash test dummy</foaf:nick>
   </rdf:Description>
-  <rdf:Description rdf:about=\"http://www.umweltprobenbank.de/testemann\">
+  <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
     <testIt>
       <rdf:List>
-        <rdf:first rdf:resource=\"http://www.umweltprobenbank.de/hello\"/>
+        <rdf:first rdf:resource="http://www.umweltprobenbank.de/hello"/>
         <rdf:rest>
           <rdf:List>
             <rdf:first>bla</rdf:first>
@@ -86,25 +84,37 @@ rdf
       </rdf:List>
     </testIt>
   </rdf:Description>
-  <rdf:Description rdf:about=\"http://www.upb.de/u1023\">
-    <rdf:type rdf:resource=\"http://www.w3.org/2008/05/skos#Concept\"/>
-    <skos:prefLabel xml:lang=\"en\">Test</skos:prefLabel>
-    <skos:related rdf:resource=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#anotherThing\"/>
+  <rdf:Description rdf:about="http://www.upb.de/u1023">
+    <rdf:type rdf:resource="http://www.w3.org/2008/05/skos#Concept"/>
+    <skos:prefLabel xml:lang="en">Test</skos:prefLabel>
+    <skos:related rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#anotherThing"/>
     <test1>bla</test1>
-    <testIt rdf:resource=\"http://www.umweltprobenbank.de/hello\"/>
-    <testIt rdf:resource=\"http://www.umweltprobenbank.de/goodbye\"/>
+    <testIt rdf:resource="http://www.umweltprobenbank.de/hello"/>
+    <testIt rdf:resource="http://www.umweltprobenbank.de/goodbye"/>
     <testIt>bla</testIt>
-    <anotherTest rdf:resource=\"http://www.test.de/foo\"/>
+    <anotherTest rdf:resource="http://www.test.de/foo"/>
   </rdf:Description>
-  <rdf:Description rdf:about=\"http://www.upb.de/xkfkrl\">
-    <rdf:type rdf:resource=\"http://www.w3.org/2008/05/skos#Concept\"/>
-    <skos:prefLabel xml:lang=\"en\">Test</skos:prefLabel>
-    <skos:related rdf:resource=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#anotherThing\"/>
+  <rdf:Description rdf:about="http://www.upb.de/xkfkrl">
+    <rdf:type rdf:resource="http://www.w3.org/2008/05/skos#Concept"/>
+    <skos:prefLabel xml:lang="en">Test</skos:prefLabel>
+    <skos:related rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#anotherThing"/>
     <test1>bla</test1>
-    <testIt rdf:resource=\"http://www.umweltprobenbank.de/hello\"/>
-    <testIt rdf:resource=\"http://www.umweltprobenbank.de/goodbye\"/>
+    <testIt rdf:resource="http://www.umweltprobenbank.de/hello"/>
+    <testIt rdf:resource="http://www.umweltprobenbank.de/goodbye"/>
     <testIt>bla</testIt>
-    <anotherTest rdf:resource=\"http://www.test.de/foo\"/>
+    <anotherTest rdf:resource="http://www.test.de/foo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2008/05/skos#testnode">
+    <test32>
+      <rdf:Description>
+        <title>dies ist ein test</title>
+        <sub>
+          <rdf:Description>
+            <title>blubb</title>
+          </rdf:Description>
+        </sub>
+      </rdf:Description>
+    </test32>
   </rdf:Description>
 </rdf:RDF>
 rdf
@@ -117,6 +127,41 @@ skos:testnode :test32 [
     ]
 ].
 =end
-  end
+    end
 
-end
+    def test_literals
+      document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
+      document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
+
+      document << IqRdf::testemann do |t|
+        t.Foaf::knows(:testefrau)
+        t.Foaf.nick("Testy")
+        t.Foaf.lastname("Testemann", :lang => :none)
+        t.age(32)
+        t.married(false)
+        t.weight(65.8)
+        t.quotes("\"I'm \\quoted\"")
+        t.line_breaks("I'm written\nover two lines")
+        t.some_literal(IqRdf::Literal.new("text", :de))
+      end
+
+      assert_equal(<<rdf, document.to_xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xml:lang="de">
+  <rdf:Description rdf:about="http://www.test.de/testemann">
+    <foaf:knows rdf:resource="http://www.test.de/testefrau"/>
+    <foaf:nick>Testy</foaf:nick>
+    <foaf:lastname xml:lang="">Testemann</foaf:lastname>
+    <age rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</age>
+    <married rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</married>
+    <weight rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">65.8</weight>
+    <quotes>"I'm \\quoted"</quotes>
+    <line_breaks>I'm written
+over two lines</line_breaks>
+    <some_literal xml:lang="de">text</some_literal>
+  </rdf:Description>
+</rdf:RDF>
+rdf
+    end
+
+  end
