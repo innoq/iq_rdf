@@ -14,9 +14,12 @@ module ActionView::TemplateHandlers
       elsif  params[:format].to_s == "nt"
         controller.response.headers["Content-Type"] ||= 'text/plain'
         document.to_ntriples
-      else
+      elsif params[:format].to_s == "rdf"
+        controller.response.headers["Content-Type"] ||= 'application/xml+rdf'
+        document.to_xml
+      else # Default => turtle
         controller.response.headers["Content-Type"] ||= 'text/turtle'
-        document.to_turtle # TODO: This should be to_xml, when implemented!
+        document.to_turtle
       end
       EOV
     end
