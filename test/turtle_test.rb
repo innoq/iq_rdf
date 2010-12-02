@@ -23,6 +23,26 @@ class TurtleTest < Test::Unit::TestCase
 rdf
   end
 
+  def test_full_uri_subject_turtle_output
+    document = IqRdf::Document.new('http://www.test.de/')
+
+    assert_raise RuntimeError do
+      IqRdf::build_full_uri_subject("bla")
+    end
+
+    document << IqRdf::build_full_uri_subject(URI.parse('http://www.xyz.de/#test'), IqRdf::build_uri('SomeType')) do |t|
+      t.test("testvalue")
+    end
+
+    assert_equal(<<rdf, document.to_turtle)
+@prefix : <http://www.test.de/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+<http://www.xyz.de/#test> a :SomeType;
+                          :test "testvalue".
+rdf
+  end
+
   def test_complex_features
     document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
 

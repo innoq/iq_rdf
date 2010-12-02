@@ -24,38 +24,60 @@ class XmlTest < Test::Unit::TestCase
 rdf
   end
 
-  def test_complex_features
-    document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
+  def test_full_uri_subject_xml_output
+    document = IqRdf::Document.new('http://www.test.de/')
 
-    document.namespaces :skos => 'http://www.w3.org/2008/05/skos#', :foaf => 'http://xmlns.com/foaf/0.1/', :upb => 'http://www.upb.de/'
-
-    document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en) # :testemann :myCustomNote "This is an example"@en.
-     
-    document << IqRdf::testemann(IqRdf::Foaf::build_uri("Person")).Foaf::name("Heinz Peter Testemann", :lang => :none) # :testemann a foaf:Person; foaf:name "Heinz Peter Testemann" .
-    document << IqRdf::testemann.Foaf::knows(IqRdf::testefrau) # :testemann foaf:knows :testefrau .
-    document << IqRdf::testemann.Foaf::nick("Crash test dummy") # :testemann foaf:nick "Crash test dummy"@de .
-
-    document << IqRdf::testemann.testIt([IqRdf::hello, "bla"]) # :testIt (:hallo :goodbye "bla"@de), "blubb"@de;  # XML: rdf:list
-
-    ["u1023", "xkfkrl"].each do |id|
-      document << IqRdf::Upb::build_uri(id, IqRdf::Skos::build_uri(:Concept)) do |doc| # upb:#{id} a skos:Concept;
-        doc.Skos::prefLabel("Test", :lang => :en) # skos:prefLabel "Test"@en;
-        doc.Skos::related(IqRdf::Rdf.anotherThing) # skos:related test:another_thing;
-
-        doc.test1("bla") # :test1 "bla"@de;
-        doc.testIt(:hello, :goodbye, "bla") # :testIt :hallo, :goodbye, "bla"@de;
-        doc.anotherTest(URI.parse("http://www.test.de/foo")) # :anotherTest <http://www.test.de/foo>;
-
-      end # .
+    assert_raise RuntimeError do
+      IqRdf::build_full_uri_subject("bla")
     end
-    document << IqRdf::Skos::testnode.test32 do |blank_node| # Blank nodes # skos:testnode :test32 [
-      blank_node.title("dies ist ein test") # :title "dies ist ein test"@de;
-      blank_node.sub do |subnode| # sub [
-        subnode.title("blubb") # title "blubb"
-      end # ]
-    end # ]
+
+    document << IqRdf::build_full_uri_subject(URI.parse('http://www.xyz.de/#test'), IqRdf::build_uri('SomeType')) do |t|
+      t.test("testvalue")
+    end
 
     assert_equal(<<rdf, document.to_xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="http://www.xyz.de/#test">
+    <rdf:type rdf:resource="http://www.test.de/SomeType"/>
+    <test>testvalue</test>
+  </rdf:Description>
+</rdf:RDF>
+rdf
+    end
+
+    def test_complex_features
+      document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
+
+      document.namespaces :skos => 'http://www.w3.org/2008/05/skos#', :foaf => 'http://xmlns.com/foaf/0.1/', :upb => 'http://www.upb.de/'
+
+      document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en) # :testemann :myCustomNote "This is an example"@en.
+     
+      document << IqRdf::testemann(IqRdf::Foaf::build_uri("Person")).Foaf::name("Heinz Peter Testemann", :lang => :none) # :testemann a foaf:Person; foaf:name "Heinz Peter Testemann" .
+      document << IqRdf::testemann.Foaf::knows(IqRdf::testefrau) # :testemann foaf:knows :testefrau .
+      document << IqRdf::testemann.Foaf::nick("Crash test dummy") # :testemann foaf:nick "Crash test dummy"@de .
+
+      document << IqRdf::testemann.testIt([IqRdf::hello, "bla"]) # :testIt (:hallo :goodbye "bla"@de), "blubb"@de;  # XML: rdf:list
+
+      ["u1023", "xkfkrl"].each do |id|
+        document << IqRdf::Upb::build_uri(id, IqRdf::Skos::build_uri(:Concept)) do |doc| # upb:#{id} a skos:Concept;
+          doc.Skos::prefLabel("Test", :lang => :en) # skos:prefLabel "Test"@en;
+          doc.Skos::related(IqRdf::Rdf.anotherThing) # skos:related test:another_thing;
+
+          doc.test1("bla") # :test1 "bla"@de;
+          doc.testIt(:hello, :goodbye, "bla") # :testIt :hallo, :goodbye, "bla"@de;
+          doc.anotherTest(URI.parse("http://www.test.de/foo")) # :anotherTest <http://www.test.de/foo>;
+
+        end # .
+      end
+      document << IqRdf::Skos::testnode.test32 do |blank_node| # Blank nodes # skos:testnode :test32 [
+        blank_node.title("dies ist ein test") # :title "dies ist ein test"@de;
+        blank_node.sub do |subnode| # sub [
+          subnode.title("blubb") # title "blubb"
+        end # ]
+      end # ]
+
+      assert_equal(<<rdf, document.to_xml)
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns="http://www.umweltprobenbank.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2008/05/skos#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:upb="http://www.upb.de/" xml:lang="de">
   <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">

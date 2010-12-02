@@ -56,4 +56,9 @@ module IqRdf
     IqRdf::Default.send(method_name, *args, &block)
   end
 
+  def self.build_full_uri_subject(uri, type = nil, &block)
+    raise "Parameter uri has to be an URI" unless uri.is_a?(URI)
+    Namespace.dummy_empty_namespace.build_uri(uri, type, &block)
+  end
+
 end
