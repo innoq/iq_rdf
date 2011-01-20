@@ -5,10 +5,10 @@ require 'rake/rdoctask'
 require 'rake/testtask'
 
 Rake::RDocTask.new do |rdoc|
-  files =['README', 'LICENSE', 'lib/**/*.rb', 'rails/**/*.rb']
+  files = ['README.rdoc', 'LICENSE', 'lib/**/*.rb', 'rails/**/*.rb']
   rdoc.rdoc_files.add(files)
-  rdoc.main = "README" # page to start on
-  rdoc.title = "IqRdf Docs"
+  rdoc.main = "README.rdoc" # page to start on
+  rdoc.title = "IqRdf Documentation"
   rdoc.rdoc_dir = 'doc' # rdoc output folder
   rdoc.options << '--line-numbers'
 end
