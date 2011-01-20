@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency "builder"
 
   s.files = %w(LICENSE README.rdoc Rakefile iq_rdf.gemspec) + Dir.glob("{lib,rails,test}/**/*")
-  s.files = Dir.glob("{test}/**/*")
-  s.files = Dir.glob("{bin}/**/*")
+  s.test_files = Dir.glob("{test}/**/*")
+  s.executables = Dir.glob("{bin}/**/*")
   s.require_paths = ["lib"]
 end
