@@ -46,7 +46,7 @@ file:
 Now you can define views in you application. Use the extension <em>.iqrdf</em>
 for the view files. You can use the extensions <em>.ttl</em> or
 <em>.rdf</em> in the URL of your request, to force the output to be
-in Turtle or N-Triple.
+in Turtle or XML/RDF.
 
 ==== The views
 In your views IqRdf gives you a <em>document</em> object you can add your triples
