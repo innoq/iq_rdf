@@ -1,7 +1,6 @@
 == IqRdf
 IqRdf is a RDF renderer for Ruby and Rails. You can use it in any Ruby
-environment to render Trurtle-, N-Triple- (not implemented jet) or XML-RDF (not
-implemented jet).
+environment to render Trurtle-, N-Triple- (not implemented jet) or XML-RDF.
 
 IqRdf underlays a Builder-like (http://builder.rubyforge.org/) approach to specify
 the RDF-Data by using a internal Ruby DSL. The basic Idea for specifing a triple
@@ -37,27 +36,24 @@ Turtle or XML:
 
 === Rails example
 Include IqRdf to your Ruby on Rails project by adding the following line to your
-config/environment.rb:
-  config.gem "iq_rdf"
+Gemfile (or with Rails 2.x in your config/environment.rb):
+  gem "iq_rdf"
 Add the mime types you want to support to your config/initializers/mime_types.rb
 file:
   Mime::Type.register "application/rdf+xml", :rdf
   Mime::Type.register "text/turtle", :ttl
   Mime::Type.register "application/n-triples", :nt
-Now you can define views in you application. Use a the extension _.rdf_ to use
-automatic content negotiation. With this view extension, you can use the
-extensions _.ttl_ or _.nt_ in the URL of your request, to force the output to be
+Now you can define views in you application. Use the extension <em>.iqrdf</em>
+for the view files. You can use the extensions <em>.ttl</em> or
+<em>.rdf</em> in the URL of your request, to force the output to be
 in Turtle or N-Triple.
 
-Use _.ttl.rdf_ as view file extension to disable the content nogatiation
-and just serve Turtle. _.nt.rdf_ only serves N-Triples.
-
 ==== The views
-In your view files IqRdf gives you a _document_ object you can add your triples
+In your views IqRdf gives you a <em>document</em> object you can add your triples
 to. But first you will have to define your namespaces and the global language if
 you want to label all String literals in a certain language (as long as there is
-no other language or _:none_ given).
-  document.namespaces :default => 'http://upb.uba.de/specimen_types/', :foaf => 'http://xmlns.com/foaf/0.1/'
+no other language or <em>:none</em> given).
+  document.namespaces :default => 'http://data.example.com/', :foaf => 'http://xmlns.com/foaf/0.1/'
   document.lang = :en
 
   document << IqRdf::test_subject.test_predicate("test")
@@ -72,10 +68,10 @@ no other language or _:none_ given).
 
   ...
 
-Use the namespace token _:default_ to mark the default namespace. This has the
+Use the namespace token <em>:default</em> to mark the default namespace. This has the
 same effect as specifing the default namespace in IqRdf::Document.new.
 
 === Complex RDF definitions
 ...
 
-Copyright (c) 2010 Till Schulte-Coerne (innoQ Deutschland GmbH), released under the GPL 1 license
+Copyright (c) 2011 Till Schulte-Coerne (innoQ Deutschland GmbH), released under the Apache License 2.0
