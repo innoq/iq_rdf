@@ -1,4 +1,4 @@
-#   Copyright 2011 Till Schulte-Coerne (innoQ Deutschland GmbH)
+#   Copyright 2011 innoQ Deutschland GmbH
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Till Schulte-Coerne"]
   s.email       = ["till.schulte-coerne@innoq.com"]
-  s.homepage    = "http://innoq.com"
+  s.homepage    = "http://github.com/innoq/iq_rdf"
   s.summary     = "IqRdf - A builder like rdf library for ruby and rails"
   s.description = s.summary
   s.extra_rdoc_files = ['README.rdoc', 'LICENSE']

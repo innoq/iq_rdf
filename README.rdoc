@@ -74,4 +74,4 @@ same effect as specifing the default namespace in IqRdf::Document.new.
 === Complex RDF definitions
 ...
 
-Copyright (c) 2011 Till Schulte-Coerne (innoQ Deutschland GmbH), released under the Apache License 2.0
+Copyright (c) 2011 innoQ Deutschland GmbH, released under the Apache License 2.0
