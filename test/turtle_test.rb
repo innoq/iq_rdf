@@ -12,7 +12,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require 'test/test_helper'
+$LOAD_PATH << File.dirname(__FILE__)
+
+require 'test_helper'
 
 class TurtleTest < Test::Unit::TestCase
   
@@ -45,7 +47,7 @@ rdf
     end
 
     document << IqRdf::build_full_uri_subject(URI.parse('http://www.xyz.de/#test'), IqRdf::build_uri('SomeType')) do |t|
-      t.test("testvalue")
+      t.sometest("testvalue")
     end
 
     assert_equal(<<rdf, document.to_turtle)
@@ -53,7 +55,7 @@ rdf
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 <http://www.xyz.de/#test> a :SomeType;
-                          :test "testvalue".
+                          :sometest "testvalue".
 rdf
   end
 

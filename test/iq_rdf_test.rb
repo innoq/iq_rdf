@@ -12,7 +12,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require 'test/test_helper'
+$LOAD_PATH << File.dirname(__FILE__)
+
+require 'test_helper'
 
 class IqRdfTest < Test::Unit::TestCase
 

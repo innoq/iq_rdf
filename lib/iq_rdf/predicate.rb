@@ -31,7 +31,9 @@ module IqRdf
           params += args
           params << {"xml:lang" => xml_lang} if xml_lang
           if block
-            xml.tag!(*params, &block)
+            xml.tag!(*params) do
+              block.call
+            end
           else
             xml.tag!(*params)
           end

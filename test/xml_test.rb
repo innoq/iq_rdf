@@ -12,7 +12,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require 'test/test_helper'
+$LOAD_PATH << File.dirname(__FILE__)
+
+require 'test_helper'
 
 class XmlTest < Test::Unit::TestCase
   
@@ -46,7 +48,7 @@ rdf
     end
 
     document << IqRdf::build_full_uri_subject(URI.parse('http://www.xyz.de/#test'), IqRdf::build_uri('SomeType')) do |t|
-      t.test("testvalue")
+      t.sometest("testvalue")
     end
 
     assert_equal(<<rdf, document.to_xml)
@@ -54,7 +56,7 @@ rdf
 <rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="http://www.xyz.de/#test">
     <rdf:type rdf:resource="http://www.test.de/SomeType"/>
-    <test>testvalue</test>
+    <sometest>testvalue</sometest>
   </rdf:Description>
 </rdf:RDF>
 rdf
@@ -199,5 +201,35 @@ over two lines</line_breaks>
 </rdf:RDF>
 rdf
     end
+
+  def test_blank_nodes
+    document = IqRdf::Document.new('http://www.test.de/')
+
+    document << IqRdf::testnode.test32 do |blank_node| # Blank nodes # :testnode :test32 [
+      blank_node.title("dies ist ein test") # :title "dies ist ein test";
+      blank_node.build_predicate(:test, "Another test") # :test "Another test";
+      blank_node.sub do |subnode| # sub [
+        subnode.title("blubb") # title "blubb"
+      end # ]
+    end # ]
+    assert_equal(<<rdf, document.to_xml)
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<rdf:RDF xmlns=\"http://www.test.de/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">
+  <rdf:Description rdf:about=\"http://www.test.de/testnode\">
+    <test32>
+      <rdf:Description>
+        <title>dies ist ein test</title>
+        <test>Another test</test>
+        <sub>
+          <rdf:Description>
+            <title>blubb</title>
+          </rdf:Description>
+        </sub>
+      </rdf:Description>
+    </test32>
+  </rdf:Description>
+</rdf:RDF>
+rdf
+  end
 
   end

@@ -39,7 +39,9 @@ module IqRdf
             end
             if elements.size > 0
               build_xml(xml, elements) do |opts, block|
-                xml.rdf :rest, &block
+                xml.rdf :rest do
+                  block.call
+                end
               end
             else
               xml.rdf :rest, "rdf:resource" => Rdf.nil.full_uri
