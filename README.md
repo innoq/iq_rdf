@@ -2,7 +2,7 @@
 IqRdf is a RDF renderer for Ruby and Rails. You can use it in any Ruby
 environment to render Trurtle-, N-Triple- (not implemented jet) or XML-RDF.
 
-IqRdf underlays a Builder-like (http://builder.rubyforge.org/) approach to specify
+IqRdf underlays a [Builder](http://builder.rubyforge.org/)-like approach to specify
 the RDF-Data by using a internal Ruby DSL. The basic Idea for specifing a triple
 (subject, predicate, object) is that the predicate is a method call on the
 subject with the object as parameters:
