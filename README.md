@@ -1,4 +1,4 @@
-## IqRdf
+# IqRdf
 IqRdf is a RDF renderer for Ruby and Rails. You can use it in any Ruby
 environment to render Trurtle-, N-Triple- (not implemented jet) or XML-RDF.
 
@@ -15,7 +15,7 @@ The IqRdf namespaces are needed not to mess up the rest of your project due to
 the heavy use of method_missing in the IqRdf-Library. See the IqRdf::use method
 for Ruby 1.9 to omit the `IqRdf::` prefix.
 
-### Ruby example
+## Ruby example
 You can use IqRdf in pure Ruby to produce Strings in a certain RDF Syntax like
 Turtle or XML:
 
@@ -39,7 +39,7 @@ document.to_turtle
 # => "@prefix : <http://www.test.de/>. ..."
 ```
 
-### Rails example
+## Rails example
 Include IqRdf to your Ruby on Rails project by adding the following line to your
 Gemfile (or with Rails 2.x in your config/environment.rb):
 
@@ -61,7 +61,7 @@ for the view files. You can use the extensions *.ttl* or
 *.rdf* in the URL of your request, to force the output to be
 in Turtle or XML/RDF.
 
-#### Views
+### Views
 In your views IqRdf gives you a *document* object you can add your triples
 to. But first you will have to define your namespaces and the global language if
 you want to label all String literals in a certain language (as long as there is
@@ -86,7 +86,7 @@ document << IqRdf::test_subject.test_predicate("test", :lang => :none)
 Use the namespace token `:default` to mark the default namespace. This has the
 same effect as specifing the default namespace in `IqRdf::Document.new`.
 
-### Complex RDF definitions
+## Complex RDF definitions
 TODO
 
 Copyright (c) 2011 innoQ Deutschland GmbH, released under the Apache License 2.0
