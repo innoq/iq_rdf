@@ -25,12 +25,12 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/innoq/iq_rdf"
   s.summary     = "IqRdf - A builder like rdf library for ruby and rails"
   s.description = s.summary
-  s.extra_rdoc_files = ['README.rdoc', 'LICENSE']
+  s.extra_rdoc_files = ['README.md', 'LICENSE']
   
   s.add_dependency "bundler"
   s.add_dependency "builder"
 
-  s.files = %w(LICENSE README.rdoc Rakefile iq_rdf.gemspec) + Dir.glob("{lib,rails,test}/**/*")
+  s.files = %w(LICENSE README.md Rakefile iq_rdf.gemspec) + Dir.glob("{lib,rails,test}/**/*")
   s.test_files = Dir.glob("{test}/**/*")
   s.executables = Dir.glob("{bin}/**/*")
   s.require_paths = ["lib"]
