@@ -39,7 +39,7 @@ module IqRdf
   # This is needed for a system check in the "use" method.
   module TestModule #:nodoc:
   end
-  TestModule::module_eval {TEST_CONST = 1} #:nodoc: Where will TEST_CONST be difined? TestModule::TEST_CONST (Ruby 1.9) or IqRdf::TEST_CONST (Ruby 1.8 and JRuby)
+  TestModule::module_eval {TEST_CONST = 1} #:nodoc: Where will TEST_CONST be defined? TestModule::TEST_CONST (Ruby 1.9) or IqRdf::TEST_CONST (Ruby 1.8 and JRuby)
 
   # This evals the given block in the context of IqRdF.
   # You can use this to be able to omit the "IqRdf::" in your turtle statements.
