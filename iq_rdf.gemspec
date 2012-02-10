@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.summary     = "IqRdf - A builder like rdf library for ruby and rails"
   s.description = s.summary
   s.extra_rdoc_files = ['README.md', 'LICENSE']
-  
+
   s.add_dependency "bundler"
   s.add_dependency "builder"
 

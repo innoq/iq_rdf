@@ -23,7 +23,7 @@ module IqRdf
     end
 
     def to_turtle(parent_lang = nil)
-      
+
     end
 
     def to_s(parent_lang = nil)

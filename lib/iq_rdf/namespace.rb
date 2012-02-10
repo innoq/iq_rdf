@@ -38,7 +38,7 @@ module IqRdf
     end
 
     # Namespace only methods
-    
+
     def self.create(token, uri_prefix)
       klass_name = self.class_name(token)
       klass = IqRdf.const_defined?(klass_name) ? IqRdf.const_get(klass_name) : IqRdf.const_set(klass_name, Class.new(self))
@@ -66,6 +66,6 @@ module IqRdf
     def self.class_name(name)
       name.to_s.gsub(/(^|_)(.)/) { $2.upcase }
     end
-  
+
   end
 end

@@ -17,7 +17,7 @@ $LOAD_PATH << File.dirname(__FILE__)
 require 'test_helper'
 
 class TurtleTest < Test::Unit::TestCase
-  
+
   def test_basic_turtle_output
     document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
     document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
@@ -213,5 +213,5 @@ rdf
 ].
 rdf
   end
-  
+
 end

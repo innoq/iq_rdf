@@ -38,6 +38,6 @@ module ActionView
         EOV
       end
     end
-    
+
   end
 end

@@ -26,10 +26,10 @@ document = IqRdf::Document.new('http://www.test.de/')
 document.namespaces :skos => 'http://www.w3.org/2008/05/skos#',
   :foaf => 'http://xmlns.com/foaf/0.1/' # A :rdf namespace is added automatically
 
-document << IqRdf::john_doe.myCustomNote("This is an example", :lang => :en) 
+document << IqRdf::john_doe.myCustomNote("This is an example", :lang => :en)
 # Turtle: :john_doe :myCustomNote "This is an example"@en.
 
-document << IqRdf::john_doe(IqRdf::Foaf::build_uri("Person")).Foaf::name("John Doe") 
+document << IqRdf::john_doe(IqRdf::Foaf::build_uri("Person")).Foaf::name("John Doe")
 # Turtle: :john_doe a foaf:Person; foaf:name "John Doe".
 
 document << IqRdf::john_doe.Foaf::knows(IqRdf::jane_doe)
@@ -46,7 +46,7 @@ Gemfile (or with Rails 2.x in your config/environment.rb):
 ```ruby
 gem "iq_rdf"
 ```
-  
+
 Add the mime types you want to support to your config/initializers/mime_types.rb
 file:
 
@@ -55,7 +55,7 @@ Mime::Type.register "application/rdf+xml", :rdf
 Mime::Type.register "text/turtle", :ttl
 Mime::Type.register "application/n-triples", :nt
 ```
-  
+
 Now you can define views in you application. Use the extension *.iqrdf*
 for the view files. You can use the extensions *.ttl* or
 *.rdf* in the URL of your request, to force the output to be
