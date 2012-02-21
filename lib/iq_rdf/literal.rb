@@ -15,13 +15,16 @@
 module IqRdf
   class Literal
 
-    def initialize(obj, lang = nil)
+    def initialize(obj, lang = nil, datatype = nil)
       @obj = obj
       @lang = lang
+      @datatype = datatype
     end
 
-    def to_s(lang = nil)
-      lang = @lang || lang # Use the Literals lang when given
+    def to_s(lang = nil, datatype = nil)
+      lang = @lang || lang
+      datatype = @datatype || datatype
+
       if @obj.is_a?(URI)
         "<#{@obj.to_s}>"
       elsif @obj === true
@@ -32,7 +35,10 @@ module IqRdf
         @obj.to_s
       else
         quote = @obj.to_s.include?("\n") ? '"""' : '"'
-        "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{(lang && lang != :none) ? "@#{lang}" : ""}"
+        res = "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}"
+        res << "@#{lang}" if lang && lang != :none
+        res << "^^#{datatype}" if datatype && datatype != :none
+        res
       end
     end
 

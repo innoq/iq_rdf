@@ -17,9 +17,10 @@ module IqRdf
     attr_reader :nodes
     attr_reader :lang
 
-    def initialize(lang = nil)
+    def initialize(lang = nil, datatype = nil)
       @nodes = []
       @lang = lang
+      @datatype = datatype
     end
 
     # You can add Nodes (Uris, Blank Nodes, Predicates), Literals and Collections

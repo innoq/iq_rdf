@@ -65,6 +65,7 @@ rdf
     document.namespaces :skos => 'http://www.w3.org/2008/05/skos#', :foaf => 'http://xmlns.com/foaf/0.1/', :upb => 'http://www.upb.de/'
 
     document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en) # :testemann :myCustomNote "This is an example"@en.
+    document << IqRdf::testemann.mySampleNote("This is a sample", :datatype => "foo") # :testemann :mySampleNote "This is a sample"^^foo.
 
     document << IqRdf::testemann(IqRdf::Foaf::build_uri("Person")).Foaf::name("Heinz Peter Testemann", :lang => :none) # :testemann a foaf:Person; foaf:name "Heinz Peter Testemann" .
     document << IqRdf::testemann.Foaf::knows(IqRdf::testefrau) # :testemann foaf:knows :testefrau .
@@ -98,6 +99,7 @@ rdf
 @prefix upb: <http://www.upb.de/>.
 
 :testemann :myCustomNote "This is an example"@en.
+:testemann :mySampleNote "This is a sample"^^foo.
 :testemann a foaf:Person;
            foaf:name "Heinz Peter Testemann".
 :testemann foaf:knows :testefrau.
