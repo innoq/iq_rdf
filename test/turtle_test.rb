@@ -136,6 +136,7 @@ rdf
       t.age(32)
       t.married(false)
       t.weight(65.8)
+      t.complex(IqRdf::Literal.new("A very complex type", :none, URI.parse("http://this.com/is#complex")))
       t.quotes("\"I'm \\quoted\"")
       t.line_breaks("I'm written\nover two lines")
       t.some_literal(IqRdf::Literal.new("text", :de))
@@ -153,6 +154,7 @@ rdf
            :age 32;
            :married false;
            :weight 65.8;
+           :complex "A very complex type"^^<http://this.com/is#complex>;
            :quotes "\\"I'm \\\\quoted\\""@de;
            :line_breaks """I'm written
 over two lines"""@de;

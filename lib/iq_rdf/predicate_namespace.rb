@@ -44,7 +44,7 @@ module IqRdf
             o = IqRdf::Default.build_uri(o)
           else
             return nil if options[:suppress_if_empty] === true && (o.nil? || o === "")
-            o = Literal.new(o)
+            o = Literal.build(o)
           end
           predicate << o
         end
