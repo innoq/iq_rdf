@@ -15,7 +15,7 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rake/testtask'
 
 Rake::RDocTask.new do |rdoc|
