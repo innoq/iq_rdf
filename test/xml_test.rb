@@ -179,6 +179,7 @@ skos:testnode :test32 [
         t.married(false)
         t.weight(65.8)
         t.complex(IqRdf::Literal.new("A very complex type", :none, URI.parse("http://this.com/is#complex")))
+        t.complex2(IqRdf::Literal.new("Shorter form", :none, IqRdf::myDatatype))
         t.quotes("\"I'm \\quoted\"")
         t.line_breaks("I'm written\nover two lines")
         t.some_literal(IqRdf::Literal.new("text", :de))
@@ -195,6 +196,7 @@ skos:testnode :test32 [
     <married rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</married>
     <weight rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">65.8</weight>
     <complex rdf:datatype="http://this.com/is#complex" xml:lang="none">A very complex type</complex>
+    <complex2 rdf:datatype="http://www.test.de/myDatatype" xml:lang="none">Shorter form</complex2>
     <quotes>"I'm \\quoted"</quotes>
     <line_breaks>I'm written
 over two lines</line_breaks>

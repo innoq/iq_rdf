@@ -137,6 +137,7 @@ rdf
       t.married(false)
       t.weight(65.8)
       t.complex(IqRdf::Literal.new("A very complex type", :none, URI.parse("http://this.com/is#complex")))
+      t.complex2(IqRdf::Literal.new("Shorter form", :none, IqRdf::myDatatype))
       t.quotes("\"I'm \\quoted\"")
       t.line_breaks("I'm written\nover two lines")
       t.some_literal(IqRdf::Literal.new("text", :de))
@@ -155,6 +156,7 @@ rdf
            :married false;
            :weight 65.8;
            :complex "A very complex type"^^<http://this.com/is#complex>;
+           :complex2 "Shorter form"^^:myDatatype;
            :quotes "\\"I'm \\\\quoted\\""@de;
            :line_breaks """I'm written
 over two lines"""@de;

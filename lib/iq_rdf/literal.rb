@@ -16,7 +16,7 @@ module IqRdf
   class Literal
 
     def initialize(obj, lang = nil, datatype = nil)
-      raise "#{datatype.inspect} is not an URI" if datatype && !datatype.is_a?(::URI)
+      raise "#{datatype.inspect} is not an URI" unless datatype.nil? || datatype.is_a?(::URI) || datatype.is_a?(IqRdf::Uri)
       @obj = obj
       @datatype = datatype
       @lang = lang
@@ -36,15 +36,26 @@ module IqRdf
 
     def to_s(parent_lang = nil)
       lang = @lang || parent_lang # Use the Literals lang when given
+      lang = (lang && lang != :none) ? "@#{lang}" : ""
       quote = @obj.to_s.include?("\n") ? '"""' : '"'
-      "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}" <<
-          ((lang && lang != :none) ? "@#{lang}" : "") <<
-          (@datatype ? "^^<#{@datatype.to_s}>" : "")
+      datatype = if @datatype.is_a?(::URI)
+        "^^<#{@datatype.to_s}>"
+      elsif @datatype.is_a?(IqRdf::Uri)
+        "^^#{@datatype.to_s}"
+      else
+        ""
+      end
+
+      "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{lang}#{datatype}"
     end
 
     def build_xml(xml, &block)
       opts = {}
-      opts["rdf:datatype"] = @datatype.to_s if @datatype
+      if @datatype.is_a?(::URI)
+        opts["rdf:datatype"] = @datatype.to_s
+      elsif @datatype.is_a?(IqRdf::Uri)
+        opts["rdf:datatype"] = @datatype.full_uri
+      end
       opts["xml:lang"] = @lang if @lang
       block.call(@obj.to_s, opts)
     end
