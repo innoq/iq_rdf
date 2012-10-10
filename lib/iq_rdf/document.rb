@@ -45,6 +45,19 @@ module IqRdf
       @nodes << node
     end
 
+    def to_ntriples
+      triples = []
+      @nodes.each do |sbj|
+        sbj.nodes.each do |prd|
+          prd.nodes.each do |obj|
+            triple = [sbj, prd, obj].map { |r| "<#{r.full_uri}>" }.join(" ")
+            triples << "#{triple} ."
+          end
+        end
+      end
+      return triples.join("\n")
+    end
+
     def to_turtle
       s = ""
       @namespaces.values.sort{ |n1, n2| n1.turtle_token <=> n2.turtle_token }.each do |namespace|
