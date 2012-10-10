@@ -47,7 +47,7 @@ module IqRdf
 
     def to_turtle
       s = ""
-      @namespaces.values.each do |namespace|
+      @namespaces.values.sort{ |n1, n2| n1.turtle_token <=> n2.turtle_token }.each do |namespace|
         s << "@prefix #{namespace.turtle_token}: <#{namespace.uri_prefix}>.\n"
       end
       s << "\n"

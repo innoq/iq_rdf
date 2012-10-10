@@ -30,8 +30,8 @@ class TurtleTest < Test::Unit::TestCase
 
     assert_equal(<<rdf, document.to_turtle)
 @prefix : <http://www.test.de/>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 :testemann foaf:knows :testefrau;
            foaf:nick "Testy"@de;
@@ -92,9 +92,9 @@ rdf
 
     assert_equal(<<rdf, document.to_turtle)
 @prefix : <http://www.umweltprobenbank.de/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix skos: <http://www.w3.org/2008/05/skos#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix upb: <http://www.upb.de/>.
 
 :testemann :myCustomNote "This is an example"@en.
@@ -146,8 +146,8 @@ rdf
 
     assert_equal(<<rdf, document.to_turtle)
 @prefix : <http://www.test.de/>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 :testemann foaf:knows :testefrau;
            foaf:nick "Testy"@de;
@@ -175,8 +175,8 @@ rdf
     document << IqRdf::testemann.Foaf::knows([], :suppress_if_empty => true)
     assert_equal(<<rdf, document.to_turtle)
 @prefix : <http://www.test.de/>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 rdf
   end
