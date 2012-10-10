@@ -70,9 +70,9 @@ module IqRdf
       xml = Builder::XmlMarkup.new(:indent => 2)
       xml.instruct!
       opts = {}
-      @namespaces.values.each{ |namespace|
+      @namespaces.values.each do |namespace|
         opts[namespace.token == :default ? "xmlns" : "xmlns:#{namespace.token.to_s}"] = namespace.uri_prefix
-      }
+      end
       opts["xml:lang"] = @document_language if @document_language
 
       xml.rdf(:RDF, opts) do
