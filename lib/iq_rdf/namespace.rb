@@ -49,7 +49,11 @@ module IqRdf
 
     def self.find_namespace_class(token)
       klass_name = self.class_name(token)
-      IqRdf.const_get(klass_name) if IqRdf.const_defined?(klass_name)
+      if IqRdf.const_defined?(klass_name) && IqRdf.const_get(klass_name) < IqRdf::Namespace # Ruby 1.9 is polluting namespaces
+        IqRdf.const_get(klass_name)
+      else
+        nil
+      end
     end
 
     def self.dummy_empty_namespace
