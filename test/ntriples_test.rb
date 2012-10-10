@@ -28,6 +28,21 @@ class NTriplesTest < Test::Unit::TestCase
     assert_equal(<<-rdf.strip, document.to_ntriples)
 <http://example.org/foo> <http://www.w3.org/2004/02/skos/core#related> <http://example.org/bar> .
     rdf
+
+    document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
+    document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
+
+    document << IqRdf::testemann do |t|
+      t.Foaf::knows(IqRdf::testefrau)
+      t.Foaf.nick("Testy")
+      t.Foaf.lastname("Testemann", :lang => :none)
+    end
+
+    assert_equal(<<-rdf.strip, document.to_ntriples)
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/knows> <http://www.test.de/testefrau> .
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/nick> "Testy"@de .
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "Testemann" .
+    rdf
   end
 
 end

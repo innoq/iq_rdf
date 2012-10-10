@@ -49,9 +49,12 @@ module IqRdf
       triples = []
       @nodes.each do |sbj|
         sbj.nodes.each do |prd|
+          lang = prd.lang || sbj.lang || @document_language # XXX: cargo-culted
           prd.nodes.each do |obj|
-            triple = [sbj, prd, obj].map { |r| "<#{r.full_uri}>" }.join(" ")
-            triples << "#{triple} ."
+            triple = [sbj, prd, obj].map do |res|
+              res.is_a?(IqRdf::Literal) ? res.to_s(lang) : "<#{res.full_uri}>"
+            end
+            triples << "#{triple.join(" ")} ."
           end
         end
       end
