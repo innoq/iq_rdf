@@ -28,15 +28,12 @@ class XmlTest < Test::Unit::TestCase
       t.Foaf.lastname("Testemann", :lang => :none)
     end
 
-    assert_equal(<<rdf, document.to_xml)
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xml:lang="de">
+    assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about="http://www.test.de/testemann">
     <foaf:knows rdf:resource="http://www.test.de/testefrau"/>
     <foaf:nick>Testy</foaf:nick>
     <foaf:lastname xml:lang="">Testemann</foaf:lastname>
   </rdf:Description>
-</rdf:RDF>
 rdf
   end
 
@@ -51,14 +48,11 @@ rdf
       t.sometest("testvalue")
     end
 
-    assert_equal(<<rdf, document.to_xml)
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about="http://www.xyz.de/#test">
     <rdf:type rdf:resource="http://www.test.de/SomeType"/>
     <sometest>testvalue</sometest>
   </rdf:Description>
-</rdf:RDF>
 rdf
     end
 
@@ -93,9 +87,7 @@ rdf
         end # ]
       end # ]
 
-      assert_equal(<<rdf, document.to_xml)
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns="http://www.umweltprobenbank.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2008/05/skos#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:upb="http://www.upb.de/" xml:lang="de">
+      assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
     <myCustomNote xml:lang="en">This is an example</myCustomNote>
   </rdf:Description>
@@ -154,7 +146,6 @@ rdf
       </rdf:Description>
     </test32>
   </rdf:Description>
-</rdf:RDF>
 rdf
 
 =begin
@@ -185,9 +176,7 @@ skos:testnode :test32 [
         t.some_literal(IqRdf::Literal.new("text", :de))
       end
 
-      assert_equal(<<rdf, document.to_xml)
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns="http://www.test.de/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xml:lang="de">
+      assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about="http://www.test.de/testemann">
     <foaf:knows rdf:resource="http://www.test.de/testefrau"/>
     <foaf:nick>Testy</foaf:nick>
@@ -202,7 +191,6 @@ skos:testnode :test32 [
 over two lines</line_breaks>
     <some_literal xml:lang="de">text</some_literal>
   </rdf:Description>
-</rdf:RDF>
 rdf
     end
 
@@ -216,9 +204,7 @@ rdf
         subnode.title("blubb") # title "blubb"
       end # ]
     end # ]
-    assert_equal(<<rdf, document.to_xml)
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<rdf:RDF xmlns=\"http://www.test.de/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">
+    assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about=\"http://www.test.de/testnode\">
     <test32>
       <rdf:Description>
@@ -232,7 +218,6 @@ rdf
       </rdf:Description>
     </test32>
   </rdf:Description>
-</rdf:RDF>
 rdf
   end
 
