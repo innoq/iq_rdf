@@ -45,4 +45,18 @@ class NTriplesTest < Test::Unit::TestCase
     rdf
   end
 
+  def test_full_uri_subject
+    document = IqRdf::Document.new('http://www.test.de/')
+
+    document << IqRdf::build_full_uri_subject(URI.parse('http://www.xyz.de/#test'),
+        IqRdf::build_uri('SomeType')) do |t|
+      t.sometest("testvalue")
+    end
+
+    assert_equal(<<-rdf.strip, document.to_ntriples)
+<http://www.xyz.de/#test> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.test.de/SomeType> .
+<http://www.xyz.de/#test> <http://www.test.de/sometest> "testvalue" .
+    rdf
+  end
+
 end

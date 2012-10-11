@@ -46,18 +46,30 @@ module IqRdf
     end
 
     def to_ntriples
+      render_triple = lambda do |(sbj, prd, obj), lang| # XXX: language handling is weird!? -- XXX: does not belong here
+        triple = [sbj, prd, obj].map do |res|
+          res.is_a?(IqRdf::Literal) ? res.to_s(lang) : "<#{res.full_uri}>"
+        end
+        return "#{triple.join(" ")} ."
+      end
+      rdf_type = IqRdf::build_full_uri_subject(URI. # XXX: hacky?
+          parse('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'))
+
       triples = []
       @nodes.each do |sbj|
+        if sbj.rdf_type
+          lang = sbj.lang || @document_language # XXX: cargo-culted
+          triples << render_triple.call([sbj, rdf_type, sbj.rdf_type], lang)
+        end
+
         sbj.nodes.each do |prd|
           lang = prd.lang || sbj.lang || @document_language # XXX: cargo-culted
           prd.nodes.each do |obj|
-            triple = [sbj, prd, obj].map do |res|
-              res.is_a?(IqRdf::Literal) ? res.to_s(lang) : "<#{res.full_uri}>"
-            end
-            triples << "#{triple.join(" ")} ."
+            triples << render_triple.call([sbj, prd, obj], lang)
           end
         end
       end
+
       return triples.join("\n")
     end
 
