@@ -59,4 +59,62 @@ class NTriplesTest < Test::Unit::TestCase
     rdf
   end
 
+  def test_complex_features
+    document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
+
+    document.namespaces :skos => 'http://www.w3.org/2008/05/skos#',
+        :foaf => 'http://xmlns.com/foaf/0.1/', :upb => 'http://www.upb.de/'
+
+    document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en)
+    document << IqRdf::testemann(IqRdf::Foaf::build_uri("Person")).
+        Foaf::name("Heinz Peter Testemann", :lang => :none)
+    document << IqRdf::testemann.Foaf::knows(IqRdf::testefrau)
+    document << IqRdf::testemann.Foaf::nick("Crash test dummy")
+
+    ["u1023", "xkfkrl"].each do |id|
+      document << IqRdf::Upb::build_uri(id, IqRdf::Skos::build_uri(:Concept)) do |doc|
+        doc.Skos::prefLabel("Test", :lang => :en)
+        doc.Skos::related(IqRdf::Rdf.anotherThing)
+
+        doc.test1("bla")
+        doc.testIt(:hello, :goodbye, "bla")
+        #doc.testIt([IqRdf::hello, IqRdf::goodbye, "bla"], "blubb") # TODO: currently unsupported
+        doc.anotherTest(URI.parse("http://www.test.de/foo"))
+
+      end
+    end
+
+    # TODO: blank nodes currently unsupported
+    #document << IqRdf::Skos::testnode.test32 do |blank_node|
+    #  blank_node.title("dies ist ein test")
+    #  blank_node.sub do |subnode|
+    #    subnode.title("blubb")
+    #  end
+    #end
+
+    assert_equal(<<-rdf.strip, document.to_ntriples)
+<http://www.umweltprobenbank.de/testemann> <http://www.umweltprobenbank.de/myCustomNote> "This is an example"@en .
+<http://www.umweltprobenbank.de/testemann> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://www.umweltprobenbank.de/testemann> <http://xmlns.com/foaf/0.1/name> "Heinz Peter Testemann" .
+<http://www.umweltprobenbank.de/testemann> <http://xmlns.com/foaf/0.1/knows> <http://www.umweltprobenbank.de/testefrau> .
+<http://www.umweltprobenbank.de/testemann> <http://xmlns.com/foaf/0.1/nick> "Crash test dummy"@de .
+<http://www.upb.de/u1023> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2008/05/skos#Concept> .
+<http://www.upb.de/u1023> <http://www.w3.org/2008/05/skos#prefLabel> "Test"@en .
+<http://www.upb.de/u1023> <http://www.w3.org/2008/05/skos#related> <http://www.w3.org/1999/02/22-rdf-syntax-ns#anotherThing> .
+<http://www.upb.de/u1023> <http://www.umweltprobenbank.de/test1> "bla"@de .
+<http://www.upb.de/u1023> <http://www.umweltprobenbank.de/testIt> <http://www.umweltprobenbank.de/hello> .
+<http://www.upb.de/u1023> <http://www.umweltprobenbank.de/testIt> <http://www.umweltprobenbank.de/goodbye> .
+<http://www.upb.de/u1023> <http://www.umweltprobenbank.de/testIt> "bla"@de .
+<http://www.upb.de/u1023> <http://www.umweltprobenbank.de/anotherTest> <http://www.test.de/foo> .
+<http://www.upb.de/xkfkrl> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2008/05/skos#Concept> .
+<http://www.upb.de/xkfkrl> <http://www.w3.org/2008/05/skos#prefLabel> "Test"@en .
+<http://www.upb.de/xkfkrl> <http://www.w3.org/2008/05/skos#related> <http://www.w3.org/1999/02/22-rdf-syntax-ns#anotherThing> .
+<http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/test1> "bla"@de .
+<http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/testIt> <http://www.umweltprobenbank.de/hello> .
+<http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/testIt> <http://www.umweltprobenbank.de/goodbye> .
+<http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/testIt> "bla"@de .
+<http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/anotherTest> <http://www.test.de/foo> .
+    rdf
+  end
+
 end
