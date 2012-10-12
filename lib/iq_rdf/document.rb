@@ -49,16 +49,28 @@ module IqRdf
       rdf_type = IqRdf::build_full_uri_subject(URI. # XXX: hacky?
           parse('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'))
       triples = []
+      blank_nodes = {}
 
       render_triple = lambda do |(sbj, prd, obj), lang| # XXX: language handling is weird!? -- XXX: does not belong here
         triple = [sbj, prd, obj].map do |res|
-          res.is_a?(IqRdf::Literal) ? res.to_s(lang) : "<#{res.full_uri}>"
+          if res.is_a?(IqRdf::Literal)
+            res.to_s(lang)
+          elsif res.is_a?(IqRdf::BlankNode)
+            node_id = blank_nodes[res]
+            unless node_id
+              node_id = blank_nodes.count + 1
+              blank_nodes[res] = node_id
+            end
+            "_:b#{node_id}"
+          else
+            "<#{res.full_uri}>"
+          end
         end
         return "#{triple.join(" ")} ."
       end
 
-      process_subject = lambda do |sbj| # XXX: does not belong here
-        if sbj.rdf_type
+      process_subject = lambda do |sbj, &block| # XXX: does not belong here
+        if (sbj.rdf_type rescue false) # XXX: `rescue` a hack for blank nodes
           lang = sbj.lang || @document_language # XXX: cargo-culted
           triples << render_triple.call([sbj, rdf_type, sbj.rdf_type], lang)
         end
@@ -66,12 +78,28 @@ module IqRdf
         sbj.nodes.each do |prd|
           lang = prd.lang || sbj.lang || @document_language # XXX: cargo-culted
           prd.nodes.each do |obj|
-            triples << render_triple.call([sbj, prd, obj], lang)
+            triple = [sbj, prd, obj]
+            triples << render_triple.call(triple, lang)
+            block.call(triple) if block
           end
         end
       end
 
-      @nodes.each { |sbj| process_subject.call(sbj) }
+      process_blank_node = lambda do |(sbj, prd, obj), current_res|
+        [sbj, obj].
+            select { |res| res.is_a?(IqRdf::BlankNode) && res != current_res }.
+            each do |res|
+          process_subject.call(res) do |(sbj, prd, obj)|
+            process_blank_node.call([sbj, prd, obj], res) # NB: recursion!
+          end
+        end
+      end
+
+      @nodes.each do |sbj|
+        process_subject.call(sbj) do |(sbj, prd, obj)|
+          process_blank_node.call([sbj, prd, obj], sbj) # XXX: special casing
+        end
+      end
 
       return triples.join("\n")
     end

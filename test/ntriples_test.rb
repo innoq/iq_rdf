@@ -84,13 +84,12 @@ class NTriplesTest < Test::Unit::TestCase
       end
     end
 
-    # TODO: blank nodes currently unsupported
-    #document << IqRdf::Skos::testnode.test32 do |blank_node|
-    #  blank_node.title("dies ist ein test")
-    #  blank_node.sub do |subnode|
-    #    subnode.title("blubb")
-    #  end
-    #end
+    document << IqRdf::Skos::testnode.test32 do |blank_node|
+      blank_node.title("dies ist ein test")
+      blank_node.sub do |subnode|
+        subnode.title("blubb")
+      end
+    end
 
     assert_equal(<<-rdf.strip, document.to_ntriples)
 <http://www.umweltprobenbank.de/testemann> <http://www.umweltprobenbank.de/myCustomNote> "This is an example"@en .
@@ -114,6 +113,10 @@ class NTriplesTest < Test::Unit::TestCase
 <http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/testIt> <http://www.umweltprobenbank.de/goodbye> .
 <http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/testIt> "bla"@de .
 <http://www.upb.de/xkfkrl> <http://www.umweltprobenbank.de/anotherTest> <http://www.test.de/foo> .
+<http://www.w3.org/2008/05/skos#testnode> <http://www.umweltprobenbank.de/test32> _:b1 .
+_:b1 <http://www.umweltprobenbank.de/title> "dies ist ein test"@de .
+_:b1 <http://www.umweltprobenbank.de/sub> _:b2 .
+_:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     rdf
   end
 
