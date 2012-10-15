@@ -59,6 +59,17 @@ class NTriplesTest < Test::Unit::TestCase
     rdf
   end
 
+  def test_full_uri_predicate
+    document = IqRdf::Document.new('http://www.test.de/')
+
+    document << IqRdf::testemann.
+        build_full_uri_predicate(URI.parse("http://www.test.org/hoho"), 42)
+
+    assert_equal(<<-rdf.strip, document.to_ntriples)
+<http://www.test.de/testemann> <http://www.test.org/hoho> 42 .
+    rdf
+  end
+
   def test_blank_nodes
     document = IqRdf::Document.new('http://www.test.de/')
 
@@ -138,6 +149,18 @@ _:b1 <http://www.umweltprobenbank.de/title> "dies ist ein test"@de .
 _:b1 <http://www.umweltprobenbank.de/sub> _:b2 .
 _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     rdf
+  end
+
+  def test_supress_if_empty_option
+    document = IqRdf::Document.new('http://www.test.de/')
+    document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
+
+    document << IqRdf::testemann.Foaf::knows(:suppress_if_empty => true)
+    document << IqRdf::testemann.Foaf::knows(nil, :suppress_if_empty => true)
+    document << IqRdf::testemann.Foaf::knows("", :suppress_if_empty => true)
+    document << IqRdf::testemann.Foaf::knows([], :suppress_if_empty => true)
+
+    assert_equal("", document.to_ntriples)
   end
 
 end
