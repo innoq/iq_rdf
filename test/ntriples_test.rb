@@ -59,6 +59,26 @@ class NTriplesTest < Test::Unit::TestCase
     rdf
   end
 
+  def test_blank_nodes
+    document = IqRdf::Document.new('http://www.test.de/')
+
+    document << IqRdf::testnode.test32 do |blank_node|
+      blank_node.title("dies ist ein test")
+      blank_node.build_predicate(:test, "Another test")
+      blank_node.sub do |subnode|
+        subnode.title("blubb")
+      end
+    end
+
+    assert_equal(<<-rdf.strip, document.to_ntriples)
+<http://www.test.de/testnode> <http://www.test.de/test32> _:b1 .
+_:b1 <http://www.test.de/title> "dies ist ein test" .
+_:b1 <http://www.test.de/test> "Another test" .
+_:b1 <http://www.test.de/sub> _:b2 .
+_:b2 <http://www.test.de/title> "blubb" .
+    rdf
+  end
+
   def test_complex_features
     document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
 
