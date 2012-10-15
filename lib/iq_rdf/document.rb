@@ -51,16 +51,20 @@ module IqRdf
       triples = []
       blank_nodes = {}
 
+      render_blank_node = lambda do |res|
+        node_id = blank_nodes[res]
+        unless node_id
+          node_id = blank_nodes.count + 1
+          blank_nodes[res] = node_id
+        end
+        return "_:b#{node_id}"
+      end
+
       render_resource = lambda do |res, lang| # XXX: does not belong here
         if res.is_a?(IqRdf::Literal)
           return res.to_s(lang)
         elsif res.is_a?(IqRdf::BlankNode)
-          node_id = blank_nodes[res]
-          unless node_id
-            node_id = blank_nodes.count + 1
-            blank_nodes[res] = node_id
-          end
-          return "_:b#{node_id}"
+          return render_blank_node.call(res)
         else
           return "<#{res.full_uri}>"
         end
