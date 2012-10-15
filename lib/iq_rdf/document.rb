@@ -51,21 +51,23 @@ module IqRdf
       triples = []
       blank_nodes = {}
 
-      render_triple = lambda do |(sbj, prd, obj), lang| # XXX: language handling is weird!? -- XXX: does not belong here
-        triple = [sbj, prd, obj].map do |res|
-          if res.is_a?(IqRdf::Literal)
-            res.to_s(lang)
-          elsif res.is_a?(IqRdf::BlankNode)
-            node_id = blank_nodes[res]
-            unless node_id
-              node_id = blank_nodes.count + 1
-              blank_nodes[res] = node_id
-            end
-            "_:b#{node_id}"
-          else
-            "<#{res.full_uri}>"
+      render_resource = lambda do |res, lang| # XXX: does not belong here
+        if res.is_a?(IqRdf::Literal)
+          return res.to_s(lang)
+        elsif res.is_a?(IqRdf::BlankNode)
+          node_id = blank_nodes[res]
+          unless node_id
+            node_id = blank_nodes.count + 1
+            blank_nodes[res] = node_id
           end
+          return "_:b#{node_id}"
+        else
+          return "<#{res.full_uri}>"
         end
+      end
+
+      render_triple = lambda do |(sbj, prd, obj), lang| # XXX: language handling is weird!? -- XXX: does not belong here
+        triple = [sbj, prd, obj].map { |res| render_resource.call(res, lang) }
         return "#{triple.join(" ")} ."
       end
 
