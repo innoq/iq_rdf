@@ -90,6 +90,24 @@ _:b2 <http://www.test.de/title> "blubb" .
     rdf
   end
 
+  def test_collections
+    document = IqRdf::Document.new('http://test.de/')
+
+    document << IqRdf::testemann.testIt([IqRdf::hello, IqRdf::goodbye, "bla"])
+
+    assert_equal(<<-rdf.strip, document.to_ntriples)
+_:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://test.de/hello> .
+_:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:b3 .
+_:b3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:b3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://test.de/goodbye> .
+_:b3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:b4 .
+_:b4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:b4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "bla" .
+<http://test.de/testemann> <http://test.de/testIt> _:b2 .
+    rdf
+  end
+
   def test_complex_features
     document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
 
@@ -109,7 +127,6 @@ _:b2 <http://www.test.de/title> "blubb" .
 
         doc.test1("bla")
         doc.testIt(:hello, :goodbye, "bla")
-        #doc.testIt([IqRdf::hello, IqRdf::goodbye, "bla"], "blubb") # TODO: currently unsupported
         doc.anotherTest(URI.parse("http://www.test.de/foo"))
 
       end

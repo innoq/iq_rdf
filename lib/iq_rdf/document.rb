@@ -46,10 +46,15 @@ module IqRdf
     end
 
     def to_ntriples
-      rdf_type = IqRdf::build_full_uri_subject(URI. # XXX: hacky?
-          parse('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'))
+      rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      rdf_type = IqRdf::build_full_uri_subject(URI.parse("#{rdf}type"))
+      rdf_list = IqRdf::build_full_uri_subject(URI.parse("#{rdf}List"))
       triples = []
       blank_nodes = {}
+
+      # pre-declarations -- XXX: smelly!
+      render_triple = nil
+      process_subject = nil
 
       render_blank_node = lambda do |res|
         node_id = blank_nodes[res]
@@ -60,11 +65,33 @@ module IqRdf
         return "_:b#{node_id}"
       end
 
+      process_collection = lambda do |res|
+        list = render_blank_node.call(res)
+        # inject list components
+        list = IqRdf::BlankNode.new
+        sublist = list
+        total = res.elements.length
+        res.elements.each_with_index do |current_element, i|
+          sublist::rdf.type(rdf_list) # _:b* a rdf:List
+          sublist::rdf.first(current_element) # _:b* rdf:first <...>
+          last = i + 1 == total
+          unless last
+            new_sublist = IqRdf::BlankNode.new
+            sublist::rdf.rest(new_sublist) # _:b* rdf:rest _:b*
+          end
+          process_subject.call(sublist)
+          sublist = new_sublist
+        end
+        return render_blank_node.call(list)
+      end
+
       render_resource = lambda do |res, lang| # XXX: does not belong here
         if res.is_a?(IqRdf::Literal)
           return res.to_s(lang)
         elsif res.is_a?(IqRdf::BlankNode)
           return render_blank_node.call(res)
+        elsif res.is_a?(IqRdf::Collection)
+          return process_collection.call(res)
         else
           return "<#{res.full_uri}>"
         end
