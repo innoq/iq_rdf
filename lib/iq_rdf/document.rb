@@ -46,9 +46,7 @@ module IqRdf
     end
 
     def to_ntriples
-      rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-      rdf_type = IqRdf::build_full_uri_subject(URI.parse("#{rdf}type"))
-      rdf_list = IqRdf::build_full_uri_subject(URI.parse("#{rdf}List"))
+      rdf_type = IqRdf::Rdf::build_uri("type")
       triples = []
       blank_nodes = {}
 
@@ -72,7 +70,7 @@ module IqRdf
         sublist = list
         total = res.elements.length
         res.elements.each_with_index do |current_element, i|
-          sublist::rdf.build_predicate("type", rdf_list) # _:b* a rdf:List
+          sublist::rdf.build_predicate("type", IqRdf::Rdf::build_uri("List")) # _:b* a rdf:List
           sublist::rdf.first(current_element) # _:b* rdf:first <...>
           last = i + 1 == total
           unless last
