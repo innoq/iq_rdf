@@ -19,4 +19,3 @@ gemspec
 
 gem 'rake'
 gem 'rdoc'
-

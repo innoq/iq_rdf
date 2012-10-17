@@ -45,6 +45,96 @@ module IqRdf
       @nodes << node
     end
 
+    def to_ntriples
+      rdf_type = IqRdf::Rdf::build_uri("type")
+      triples = []
+      blank_nodes = {}
+
+      # pre-declarations -- XXX: smelly!
+      render_triple = nil
+      process_subject = nil
+
+      render_blank_node = lambda do |res|
+        node_id = blank_nodes[res]
+        unless node_id
+          node_id = blank_nodes.count + 1
+          blank_nodes[res] = node_id
+        end
+        return "_:b#{node_id}"
+      end
+
+      process_collection = lambda do |res|
+        list = render_blank_node.call(res)
+        # inject list components
+        list = IqRdf::BlankNode.new
+        sublist = list
+        total = res.elements.length
+        res.elements.each_with_index do |current_element, i|
+          sublist::rdf.build_predicate("type", IqRdf::Rdf::build_uri("List")) # _:b* a rdf:List
+          sublist::rdf.first(current_element) # _:b* rdf:first <...>
+          last = i + 1 == total
+          unless last
+            new_sublist = IqRdf::BlankNode.new
+            sublist::rdf.rest(new_sublist) # _:b* rdf:rest _:b*
+          end
+          process_subject.call(sublist)
+          sublist = new_sublist
+        end
+        return render_blank_node.call(list)
+      end
+
+      render_resource = lambda do |res, lang| # XXX: does not belong here
+        if res.is_a?(IqRdf::Literal)
+          return res.to_s(lang)
+        elsif res.is_a?(IqRdf::BlankNode)
+          return render_blank_node.call(res)
+        elsif res.is_a?(IqRdf::Collection)
+          return process_collection.call(res)
+        else
+          return "<#{res.full_uri}>"
+        end
+      end
+
+      render_triple = lambda do |(sbj, prd, obj), lang| # XXX: language handling is weird!? -- XXX: does not belong here
+        triple = [sbj, prd, obj].map { |res| render_resource.call(res, lang) }
+        return "#{triple.join(" ")} ."
+      end
+
+      process_subject = lambda do |sbj, &block| # XXX: does not belong here
+        if (sbj.rdf_type rescue false) # XXX: `rescue` a hack for blank nodes
+          lang = sbj.lang || @document_language # XXX: cargo-culted
+          triples << render_triple.call([sbj, rdf_type, sbj.rdf_type], lang)
+        end
+
+        sbj.nodes.each do |prd|
+          lang = prd.lang || sbj.lang || @document_language # XXX: cargo-culted
+          prd.nodes.each do |obj|
+            triple = [sbj, prd, obj]
+            triples << render_triple.call(triple, lang)
+            block.call(triple) if block
+          end
+        end
+      end
+
+      process_blank_node = lambda do |(sbj, prd, obj), current_res|
+        [sbj, obj].
+            select { |res| res.is_a?(IqRdf::BlankNode) && res != current_res }.
+            each do |res|
+          process_subject.call(res) do |(sbj, prd, obj)|
+            process_blank_node.call([sbj, prd, obj], res) # NB: recursion!
+          end
+        end
+      end
+
+      @nodes.each do |sbj|
+        process_subject.call(sbj) do |(sbj, prd, obj)|
+          process_blank_node.call([sbj, prd, obj], sbj) # XXX: special casing
+        end
+      end
+
+      return triples.join("\n")
+    end
+
     def to_turtle
       s = ""
       @namespaces.values.sort{ |n1, n2| n1.turtle_token <=> n2.turtle_token }.each do |namespace|
