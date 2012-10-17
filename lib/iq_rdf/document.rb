@@ -72,7 +72,7 @@ module IqRdf
         sublist = list
         total = res.elements.length
         res.elements.each_with_index do |current_element, i|
-          sublist::rdf.type(rdf_list) # _:b* a rdf:List
+          sublist::rdf.build_predicate("type", rdf_list) # _:b* a rdf:List
           sublist::rdf.first(current_element) # _:b* rdf:first <...>
           last = i + 1 == total
           unless last
