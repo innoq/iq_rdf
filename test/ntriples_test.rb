@@ -25,7 +25,7 @@ class NTriplesTest < Test::Unit::TestCase
       node.skos.related(IqRdf.bar)
     end
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    assert_equal(<<-rdf.strip, document.to_ntriples.strip)
 <http://example.org/foo> <http://www.w3.org/2004/02/skos/core#related> <http://example.org/bar> .
     rdf
 
@@ -38,11 +38,14 @@ class NTriplesTest < Test::Unit::TestCase
       t.Foaf.lastname("Testemann", :lang => :none)
     end
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    actual = document.to_ntriples
+    assert_equal(<<-rdf.strip, actual.strip)
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/knows> <http://www.test.de/testefrau> .
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/nick> "Testy"@de .
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "Testemann" .
     rdf
+
+    assert actual.end_with?("\n"), "trailing line break"
   end
 
   def test_full_uri_subject
@@ -53,7 +56,7 @@ class NTriplesTest < Test::Unit::TestCase
       t.sometest("testvalue")
     end
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    assert_equal(<<-rdf.strip, document.to_ntriples.strip)
 <http://www.xyz.de/#test> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.test.de/SomeType> .
 <http://www.xyz.de/#test> <http://www.test.de/sometest> "testvalue" .
     rdf
@@ -65,7 +68,7 @@ class NTriplesTest < Test::Unit::TestCase
     document << IqRdf::testemann.
         build_full_uri_predicate(URI.parse("http://www.test.org/hoho"), 42)
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    assert_equal(<<-rdf.strip, document.to_ntriples.strip)
 <http://www.test.de/testemann> <http://www.test.org/hoho> 42 .
     rdf
   end
@@ -81,7 +84,7 @@ class NTriplesTest < Test::Unit::TestCase
       end
     end
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    assert_equal(<<-rdf.strip, document.to_ntriples.strip)
 <http://www.test.de/testnode> <http://www.test.de/test32> _:b1 .
 _:b1 <http://www.test.de/title> "dies ist ein test" .
 _:b1 <http://www.test.de/test> "Another test" .
@@ -95,7 +98,7 @@ _:b2 <http://www.test.de/title> "blubb" .
 
     document << IqRdf::testemann.testIt([IqRdf::hello, IqRdf::goodbye, "bla"])
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    assert_equal(<<-rdf.strip, document.to_ntriples.strip)
 _:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
 _:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://test.de/hello> .
 _:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:b3 .
@@ -139,7 +142,7 @@ _:b4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "bla" .
       end
     end
 
-    assert_equal(<<-rdf.strip, document.to_ntriples)
+    assert_equal(<<-rdf.strip, document.to_ntriples.strip)
 <http://www.umweltprobenbank.de/testemann> <http://www.umweltprobenbank.de/myCustomNote> "This is an example"@en .
 <http://www.umweltprobenbank.de/testemann> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
 <http://www.umweltprobenbank.de/testemann> <http://xmlns.com/foaf/0.1/name> "Heinz Peter Testemann" .
@@ -177,7 +180,7 @@ _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     document << IqRdf::testemann.Foaf::knows("", :suppress_if_empty => true)
     document << IqRdf::testemann.Foaf::knows([], :suppress_if_empty => true)
 
-    assert_equal("", document.to_ntriples)
+    assert_equal("", document.to_ntriples.strip)
   end
 
 end

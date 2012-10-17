@@ -132,7 +132,7 @@ module IqRdf
         end
       end
 
-      return triples.join("\n")
+      return triples.join("\n") + "\n"
     end
 
     def to_turtle
