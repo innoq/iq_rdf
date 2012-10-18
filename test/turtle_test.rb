@@ -141,7 +141,6 @@ rdf
       t.quotes("\"I'm \\quoted\"")
       t.line_breaks("I'm written\nover two lines")
       t.some_literal(IqRdf::Literal.new("text", :de))
-      t.messy(IqRdf::PlainTurtleLiteral.new('"this_already_is_in_turtle_format"@en'))
     end
 
     assert_equal(<<rdf, document.to_turtle)
@@ -160,8 +159,7 @@ rdf
            :quotes "\\"I'm \\\\quoted\\""@de;
            :line_breaks """I'm written
 over two lines"""@de;
-           :some_literal "text"@de;
-           :messy "this_already_is_in_turtle_format"@en.
+           :some_literal "text"@de.
 rdf
   end
 
