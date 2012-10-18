@@ -52,7 +52,7 @@ class NTriplesTest < Test::Unit::TestCase
     document = IqRdf::Document.new('http://www.test.de/')
 
     document << IqRdf::build_full_uri_subject(URI.parse('http://www.xyz.de/#test'),
-        IqRdf::build_uri('SomeType')) do |t|
+      IqRdf::build_uri('SomeType')) do |t|
       t.sometest("testvalue")
     end
 
@@ -69,7 +69,7 @@ class NTriplesTest < Test::Unit::TestCase
         build_full_uri_predicate(URI.parse("http://www.test.org/hoho"), 42)
 
     assert_equal(<<-rdf.strip, document.to_ntriples.strip)
-<http://www.test.de/testemann> <http://www.test.org/hoho> 42 .
+<http://www.test.de/testemann> <http://www.test.org/hoho> "42"^^<http://www.w3.org/2001/XMLSchema#integer> .
     rdf
   end
 
@@ -171,16 +171,50 @@ _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     rdf
   end
 
-  def test_supress_if_empty_option
-    document = IqRdf::Document.new('http://www.test.de/')
+  def test_literals
+    document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
     document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
 
-    document << IqRdf::testemann.Foaf::knows(:suppress_if_empty => true)
-    document << IqRdf::testemann.Foaf::knows(nil, :suppress_if_empty => true)
-    document << IqRdf::testemann.Foaf::knows("", :suppress_if_empty => true)
-    document << IqRdf::testemann.Foaf::knows([], :suppress_if_empty => true)
+    document << IqRdf::testemann do |t|
+      t.Foaf::knows(:testefrau)
+      t.Foaf.nick("Testy")
+      t.Foaf.lastname("Testemann", :lang => :none)
+      t.age(32)
+      t.married(false)
+      t.weight(65.8)
+      t.complex(IqRdf::Literal.new("A very complex type", :none, URI.parse("http://this.com/is#complex")))
+      t.complex2(IqRdf::Literal.new("Shorter form", :none, IqRdf::myDatatype))
+      t.quotes("\"I'm \\quoted\"")
+      t.line_breaks("I'm written\nover two lines")
+      t.some_literal(IqRdf::Literal.new("text", :de))
+    end
 
-    assert_equal("", document.to_ntriples.strip)
+    assert_equal(<<rdf.strip, document.to_ntriples.strip)
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/knows> <http://www.test.de/testefrau> .
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/nick> "Testy"@de .
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "Testemann" .
+<http://www.test.de/testemann> <http://www.test.de/age> "32"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.test.de/testemann> <http://www.test.de/married> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://www.test.de/testemann> <http://www.test.de/weight> "65.8"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://www.test.de/testemann> <http://www.test.de/complex> "A very complex type"^^<http://this.com/is#complex> .
+<http://www.test.de/testemann> <http://www.test.de/complex2> "Shorter form"^^<http://www.test.de/myDatatype> .
+<http://www.test.de/testemann> <http://www.test.de/quotes> "\\"I'm \\\\quoted\\""@de .
+<http://www.test.de/testemann> <http://www.test.de/line_breaks> """I'm written
+over two lines"""@de .
+<http://www.test.de/testemann> <http://www.test.de/some_literal> "text"@de .
+rdf
+    end
+
+    def test_supress_if_empty_option
+      document = IqRdf::Document.new('http://www.test.de/')
+      document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
+
+      document << IqRdf::testemann.Foaf::knows(:suppress_if_empty => true)
+      document << IqRdf::testemann.Foaf::knows(nil, :suppress_if_empty => true)
+      document << IqRdf::testemann.Foaf::knows("", :suppress_if_empty => true)
+      document << IqRdf::testemann.Foaf::knows([], :suppress_if_empty => true)
+
+      assert_equal("", document.to_ntriples.strip)
+    end
+
   end
-
-end

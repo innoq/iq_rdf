@@ -85,7 +85,7 @@ module IqRdf
 
       render_resource = lambda do |res, lang| # XXX: does not belong here
         if res.is_a?(IqRdf::Literal)
-          return res.to_s(lang)
+          return res.to_ntriples(lang)
         elsif res.is_a?(IqRdf::BlankNode)
           return render_blank_node.call(res)
         elsif res.is_a?(IqRdf::Collection)

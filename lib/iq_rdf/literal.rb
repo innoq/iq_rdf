@@ -49,6 +49,20 @@ module IqRdf
       "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{lang}#{datatype}"
     end
 
+    def to_ntriples(parent_lang = nil)
+      quote = @obj.to_s.include?("\n") ? '"""' : '"'
+      suffix = if @datatype.is_a?(::URI)
+        "^^<#{@datatype.to_s}>"
+      elsif @datatype.is_a?(IqRdf::Uri)
+        "^^<#{@datatype.full_uri}>"
+      else
+        lang = @lang || parent_lang # Use the Literals lang when given
+        (lang && lang != :none) ? "@#{lang}" : ""
+      end
+
+      "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{suffix}"
+    end
+
     def build_xml(xml, &block)
       opts = {}
       if @datatype.is_a?(::URI)

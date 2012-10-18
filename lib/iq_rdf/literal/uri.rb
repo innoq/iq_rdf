@@ -11,6 +11,10 @@ module IqRdf
         "<#{@obj.to_s}>"
       end
 
+      def to_ntriples(parent_lang = nil)
+        "<#{@obj.to_s}>"
+      end
+
       def build_xml(xml, &block)
         block.call("rdf:resource" => @obj.to_s)
       end
