@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+#   
 #   Copyright 2011 innoQ Deutschland GmbH
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -178,7 +180,7 @@ _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     document << IqRdf::testemann do |t|
       t.Foaf::knows(:testefrau)
       t.Foaf.nick("Testy")
-      t.Foaf.lastname("Testemann", :lang => :none)
+      t.Foaf.lastname("Tästämann", :lang => :none)
       t.age(32)
       t.married(false)
       t.weight(65.8)
@@ -192,7 +194,7 @@ _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     assert_equal(<<rdf.strip, document.to_ntriples.strip)
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/knows> <http://www.test.de/testefrau> .
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/nick> "Testy"@de .
-<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "Testemann" .
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "T\\u00e4st\\u00e4mann" .
 <http://www.test.de/testemann> <http://www.test.de/age> "32"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://www.test.de/testemann> <http://www.test.de/married> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://www.test.de/testemann> <http://www.test.de/weight> "65.8"^^<http://www.w3.org/2001/XMLSchema#decimal> .
