@@ -19,3 +19,4 @@ gemspec
 
 gem 'rake'
 gem 'rdoc'
+gem 'active_support'
