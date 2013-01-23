@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
   s.add_dependency "builder"
-  s.add_dependency "active_support"
+  s.add_dependency "activesupport"
 
   s.files = %w(LICENSE README.md Rakefile iq_rdf.gemspec) + Dir.glob("{lib,rails,test}/**/*")
   s.test_files = Dir.glob("{test}/**/*")
