@@ -13,5 +13,5 @@
 #   limitations under the License.
 
 module IqRdf
-  VERSION = "0.1.8"
+  VERSION = "0.1.9"
 end
