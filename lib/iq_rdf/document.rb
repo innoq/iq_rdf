@@ -40,7 +40,7 @@ module IqRdf
         else
           # basic declaration :sdmxmeasure => "http://purl.org/linked-data/sdmx/2009/measure#"
           uri_prefix = ::URI.parse(uri_prefix)
-
+          raise ArgumentError, "Parameter 'namespaces' must be im the form {Symbol => URIString, ...}" unless name.is_a? Symbol
           register_namespace(name, uri_prefix, name)
         end
       end

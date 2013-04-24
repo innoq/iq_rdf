@@ -47,7 +47,6 @@ module IqRdf
       klass_name = self.class_name(token)
       klass = IqRdf.const_defined?(klass_name) ? IqRdf.const_get(klass_name) : IqRdf.const_set(klass_name, Class.new(self))
       klass.instance_variable_set(:@token, token)
-      
       klass.instance_variable_set(:@prefix, prefix)
       klass.instance_variable_set(:@uri_prefix, uri_prefix)
       klass
