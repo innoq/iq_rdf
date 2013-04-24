@@ -21,12 +21,16 @@ module IqRdf
       self.instance_variable_get(:@token)
     end
 
+    def self.prefix
+      self.instance_variable_get(:@prefix)
+    end
+
     def self.uri_prefix
       self.instance_variable_get(:@uri_prefix)
     end
 
     def self.turtle_token
-      self.token != :default ? self.token.to_s : ""
+      self.prefix != :default ? self.prefix.to_s : ""
     end
 
     def self.build_uri(postfix, type = nil, &block)
@@ -39,10 +43,12 @@ module IqRdf
 
     # Namespace only methods
 
-    def self.create(token, uri_prefix)
+    def self.create(token, uri_prefix, prefix)
       klass_name = self.class_name(token)
       klass = IqRdf.const_defined?(klass_name) ? IqRdf.const_get(klass_name) : IqRdf.const_set(klass_name, Class.new(self))
       klass.instance_variable_set(:@token, token)
+      
+      klass.instance_variable_set(:@prefix, prefix)
       klass.instance_variable_set(:@uri_prefix, uri_prefix)
       klass
     end

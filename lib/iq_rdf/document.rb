@@ -31,10 +31,18 @@ module IqRdf
       raise ArgumentError, "Parameter 'namespaces' has to be a hash" unless namespaces.is_a?(Hash)
 
       namespaces.each do |name, uri_prefix|
-        uri_prefix = ::URI.parse(uri_prefix)
-        raise ArgumentError, "Parameter 'namespaces' must be im the form {Symbol => URIString, ...}" unless name.is_a? Symbol
+        if uri_prefix.is_a? Hash
+          # namespace declaration :sdmxmeasure => {'sdmx-measure', "http://purl.org/linked-data/sdmx/2009/measure#"}
+          uri_prefix.each do |prefix, uri_prefix|
+            uri_prefix = ::URI.parse(uri_prefix)
+            register_namespace(name, uri_prefix, prefix)
+          end
+        else
+          # basic declaration :sdmxmeasure => "http://purl.org/linked-data/sdmx/2009/measure#"
+          uri_prefix = ::URI.parse(uri_prefix)
 
-        register_namespace(name, uri_prefix)
+          register_namespace(name, uri_prefix, name)
+        end
       end
       self
     end
@@ -161,7 +169,7 @@ module IqRdf
       xml.instruct!
       opts = {}
       @namespaces.values.each do |namespace|
-        opts[namespace.token == :default ? "xmlns" : "xmlns:#{namespace.token.to_s}"] = namespace.uri_prefix
+        opts[namespace.token == :default ? "xmlns" : "xmlns:#{namespace.prefix.to_s}"] = namespace.uri_prefix
       end
       opts["xml:lang"] = @document_language if @document_language
 
@@ -175,8 +183,8 @@ module IqRdf
 
     private
 
-    def register_namespace(name, uri_prefix)
-      (@namespaces ||= {})[name] = IqRdf::Namespace.create(name, uri_prefix)
+    def register_namespace(name, uri_prefix, prefix)
+      (@namespaces ||= {})[name] = IqRdf::Namespace.create(name, uri_prefix, prefix)
     end
 
   end
