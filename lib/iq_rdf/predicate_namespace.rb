@@ -25,7 +25,7 @@ module IqRdf
       objects = args
       predicate = IqRdf::Predicate.new(@predicate_namespace, postfix, @subject, options[:lang])
       if (block)
-        raise ArgumentError, "A predicate may either have agruments or a block, or both." if objects.size > 0
+        raise ArgumentError, "A predicate may either have arguments or a block, or both." if objects.size > 0
         blank_node = IqRdf::BlankNode.new
         yield blank_node
         predicate << blank_node

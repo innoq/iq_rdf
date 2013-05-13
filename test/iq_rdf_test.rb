@@ -39,7 +39,7 @@ class IqRdfTest < Test::Unit::TestCase
   end
 
   def test_uri_definitions
-    IqRdf::Document.new("http://default-namespace.com/").namespaces :innoq => 'http://www.innoq.com/'
+    IqRdf::Document.new("http://default-namespace.com/").namespaces :innoq => "http://www.innoq.com/"
 
     IqRdf::Innoq::tillsc
 
