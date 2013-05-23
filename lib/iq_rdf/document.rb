@@ -135,7 +135,22 @@ module IqRdf
       return triples.join("\n") + "\n"
     end
 
-    def to_turtle
+    # `indent` specifies the characters used for indentation - if it is not
+    # provided, blocks are aligned based on the respective subject's length:
+    #
+    #     :lipsum skos:prefLabel "lipsum";
+    #         skos:altLabel "lorem ipsum".
+    #     :helloworld skos:prefLabel "hello world";
+    #         skos:altLabel "Hello World!".
+    #
+    # vs.
+    #
+    #     :lipsum skos:prefLabel "lipsum";
+    #             skos:altLabel "lorem ipsum".
+    #     :helloworld skos:prefLabel "hello world";
+    #                 skos:altLabel "Hello World!".
+    #
+    def to_turtle(indent = nil)
       s = ""
       @namespaces.values.sort{ |n1, n2| n1.turtle_token <=> n2.turtle_token }.each do |namespace|
         s << "@prefix #{namespace.turtle_token}: <#{namespace.uri_prefix}>.\n"
@@ -145,11 +160,13 @@ module IqRdf
         pref = "#{node.to_s(@document_language)}"
         if node.rdf_type
           s << "#{pref} a #{node.rdf_type}"
-          pref = ";\n" + "".ljust(node.to_s(@document_language).length)
+          indentation = indent || "".ljust(node.to_s(@document_language).length)
+          pref = ";\n#{indentation}"
         end
         node.nodes.each do |predicate|
           s << "#{pref} #{predicate.to_s} #{predicate.nodes.map{|o| o.to_s(predicate.lang || node.lang || @document_language)}.join(", ")}"
-          pref = ";\n" + "".ljust(node.to_s(@document_language).length)
+          indentation = indent || "".ljust(node.to_s(@document_language).length)
+          pref = ";\n#{indentation}"
         end
         s << ".\n"
       end
