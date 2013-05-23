@@ -194,7 +194,7 @@ _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
     assert_equal(<<rdf.strip, document.to_ntriples.strip)
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/knows> <http://www.test.de/testefrau> .
 <http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/nick> "Testy"@de .
-<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "T\\u00e4st\\u00e4mann" .
+<http://www.test.de/testemann> <http://xmlns.com/foaf/0.1/lastname> "Tästämann" .
 <http://www.test.de/testemann> <http://www.test.de/age> "32"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://www.test.de/testemann> <http://www.test.de/married> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://www.test.de/testemann> <http://www.test.de/weight> "65.8"^^<http://www.w3.org/2001/XMLSchema#decimal> .
