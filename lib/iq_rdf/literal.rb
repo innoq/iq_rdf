@@ -12,8 +12,6 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require 'active_support'
-
 module IqRdf
   class Literal
 
@@ -52,7 +50,7 @@ module IqRdf
     end
 
     def to_ntriples(parent_lang = nil)
-      additional_quote = @obj.to_s.include?("\n") ? '""' : ''
+      quote = @obj.to_s.include?("\n") ? '"""' : '"'
       suffix = if @datatype.is_a?(::URI)
         "^^<#{@datatype.to_s}>"
       elsif @datatype.is_a?(IqRdf::Uri)
@@ -62,7 +60,7 @@ module IqRdf
         (lang && lang != :none) ? "@#{lang}" : ""
       end
 
-      "#{additional_quote}#{ActiveSupport::JSON.encode(@obj.to_s).gsub('\\n', "\n")}#{additional_quote}#{suffix}"
+      "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{suffix}"
     end
 
     def build_xml(xml, &block)
