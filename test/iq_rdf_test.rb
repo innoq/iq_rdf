@@ -28,13 +28,16 @@ class IqRdfTest < Test::Unit::TestCase
     assert_raise(URI::InvalidURIError) { document.namespaces :correct => 12 }
 
     document.namespaces :innoq => "http://www.innoq.com/"
-    document.namespaces :uba => "http://www.uba.de/"
+    document.namespaces :uba => {"uba" => "http://www.uba.de/"}
 
     IqRdf::Innoq::uri_prefix
 
     assert_equal("http://default-namespace.com/", IqRdf::uri_prefix.to_s)
     assert_equal("http://www.innoq.com/", IqRdf::Innoq::uri_prefix.to_s)
     assert_equal("http://www.uba.de/", IqRdf::Uba::uri_prefix.to_s)
+
+    assert_equal("innoq", IqRdf::Innoq::prefix.to_s)
+    assert_equal("uba", IqRdf::Uba::prefix.to_s)
 
   end
 

@@ -24,7 +24,8 @@ require 'IqRdf'
 document = IqRdf::Document.new('http://www.test.de/')
 
 document.namespaces :skos => 'http://www.w3.org/2008/05/skos#',
-  :foaf => 'http://xmlns.com/foaf/0.1/' # A :rdf namespace is added automatically
+  :foaf => 'http://xmlns.com/foaf/0.1/', # A :rdf namespace is added automatically
+  :sdmxdimension => {'sdmx-dimension' => 'http://purl.org/linked-data/sdmx/2009/measure#'} # alternative to define namespaces (e.g. if you want to use '-' inside prefix)
 
 document << IqRdf::john_doe.myCustomNote("This is an example", :lang => :en)
 # Turtle: :john_doe :myCustomNote "This is an example"@en.
