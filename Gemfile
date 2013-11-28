@@ -12,7 +12,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-source "http://rubygems.org"
+source 'https://rubygems.org'
 
 # Specify your gem's dependencies in blub.gemspec
 gemspec
