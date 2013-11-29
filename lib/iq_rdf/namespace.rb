@@ -40,8 +40,7 @@ module IqRdf
     # Namespace only methods
 
     def self.create(token, uri_prefix)
-      klass_name = self.class_name(token)
-      klass = IqRdf.const_defined?(klass_name, false) ? IqRdf.const_get(klass_name, false) : IqRdf.const_set(klass_name, Class.new(self))
+      klass = IqRdf.find_or_create_namespace_class(self.class_name(token))
       klass.instance_variable_set(:@token, token)
       klass.instance_variable_set(:@uri_prefix, uri_prefix)
       klass

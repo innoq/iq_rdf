@@ -77,4 +77,12 @@ module IqRdf
     Namespace.dummy_empty_namespace.build_uri(uri, type, &block)
   end
 
+  def self.find_or_create_namespace_class(klass_name)
+    if RUBY_VERSION < "1.9"
+      self.const_defined?(klass_name) ? self.const_get(klass_name) : self.const_set(klass_name, Class.new(IqRdf::Namespace))
+    else
+      self.const_defined?(klass_name) ? self.const_get(klass_name) : self.const_set(klass_name, Class.new(IqRdf::Namespace))
+    end
+  end
+
 end
