@@ -81,7 +81,7 @@ module IqRdf
     if RUBY_VERSION < "1.9"
       self.const_defined?(klass_name) ? self.const_get(klass_name) : self.const_set(klass_name, Class.new(IqRdf::Namespace))
     else
-      self.const_defined?(klass_name) ? self.const_get(klass_name) : self.const_set(klass_name, Class.new(IqRdf::Namespace))
+      self.const_defined?(klass_name, false) ? self.const_get(klass_name, false) : self.const_set(klass_name, Class.new(IqRdf::Namespace))
     end
   end
 
