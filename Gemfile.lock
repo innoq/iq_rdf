@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    iq_rdf (0.1.12)
+    iq_rdf (0.1.13)
       activesupport
       builder
       bundler
