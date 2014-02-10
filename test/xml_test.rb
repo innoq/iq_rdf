@@ -54,40 +54,40 @@ rdf
     <sometest>testvalue</sometest>
   </rdf:Description>
 rdf
+  end
+
+  def test_complex_features
+    document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
+
+    document.namespaces :skos => 'http://www.w3.org/2008/05/skos#', :foaf => 'http://xmlns.com/foaf/0.1/', :upb => 'http://www.upb.de/'
+
+    document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en) # :testemann :myCustomNote "This is an example"@en.
+
+    document << IqRdf::testemann(IqRdf::Foaf::build_uri("Person")).Foaf::name("Heinz Peter Testemann", :lang => :none) # :testemann a foaf:Person; foaf:name "Heinz Peter Testemann" .
+    document << IqRdf::testemann.Foaf::knows(IqRdf::testefrau) # :testemann foaf:knows :testefrau .
+    document << IqRdf::testemann.Foaf::nick("Crash test dummy") # :testemann foaf:nick "Crash test dummy"@de .
+
+    document << IqRdf::testemann.testIt([IqRdf::hello, "bla"]) # :testIt (:hallo :goodbye "bla"@de), "blubb"@de;  # XML: rdf:list
+
+    ["u1023", "xkfkrl"].each do |id|
+      document << IqRdf::Upb::build_uri(id, IqRdf::Skos::build_uri(:Concept)) do |doc| # upb:#{id} a skos:Concept;
+        doc.Skos::prefLabel("Test", :lang => :en) # skos:prefLabel "Test"@en;
+        doc.Skos::related(IqRdf::Rdf.anotherThing) # skos:related test:another_thing;
+
+        doc.test1("bla") # :test1 "bla"@de;
+        doc.testIt(:hello, :goodbye, "bla") # :testIt :hallo, :goodbye, "bla"@de;
+        doc.anotherTest(URI.parse("http://www.test.de/foo")) # :anotherTest <http://www.test.de/foo>;
+
+      end # .
     end
-
-    def test_complex_features
-      document = IqRdf::Document.new('http://www.umweltprobenbank.de/', :lang => :de)
-
-      document.namespaces :skos => 'http://www.w3.org/2008/05/skos#', :foaf => 'http://xmlns.com/foaf/0.1/', :upb => 'http://www.upb.de/'
-
-      document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en) # :testemann :myCustomNote "This is an example"@en.
-
-      document << IqRdf::testemann(IqRdf::Foaf::build_uri("Person")).Foaf::name("Heinz Peter Testemann", :lang => :none) # :testemann a foaf:Person; foaf:name "Heinz Peter Testemann" .
-      document << IqRdf::testemann.Foaf::knows(IqRdf::testefrau) # :testemann foaf:knows :testefrau .
-      document << IqRdf::testemann.Foaf::nick("Crash test dummy") # :testemann foaf:nick "Crash test dummy"@de .
-
-      document << IqRdf::testemann.testIt([IqRdf::hello, "bla"]) # :testIt (:hallo :goodbye "bla"@de), "blubb"@de;  # XML: rdf:list
-
-      ["u1023", "xkfkrl"].each do |id|
-        document << IqRdf::Upb::build_uri(id, IqRdf::Skos::build_uri(:Concept)) do |doc| # upb:#{id} a skos:Concept;
-          doc.Skos::prefLabel("Test", :lang => :en) # skos:prefLabel "Test"@en;
-          doc.Skos::related(IqRdf::Rdf.anotherThing) # skos:related test:another_thing;
-
-          doc.test1("bla") # :test1 "bla"@de;
-          doc.testIt(:hello, :goodbye, "bla") # :testIt :hallo, :goodbye, "bla"@de;
-          doc.anotherTest(URI.parse("http://www.test.de/foo")) # :anotherTest <http://www.test.de/foo>;
-
-        end # .
-      end
-      document << IqRdf::Skos::testnode.test32 do |blank_node| # Blank nodes # skos:testnode :test32 [
-        blank_node.title("dies ist ein test") # :title "dies ist ein test"@de;
-        blank_node.sub do |subnode| # sub [
-          subnode.title("blubb") # title "blubb"
-        end # ]
+    document << IqRdf::Skos::testnode.test32 do |blank_node| # Blank nodes # skos:testnode :test32 [
+      blank_node.title("dies ist ein test") # :title "dies ist ein test"@de;
+      blank_node.sub do |subnode| # sub [
+        subnode.title("blubb") # title "blubb"
       end # ]
+    end # ]
 
-      assert_match(<<rdf, document.to_xml)
+    assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
     <myCustomNote xml:lang="en">This is an example</myCustomNote>
   </rdf:Description>
@@ -156,27 +156,27 @@ skos:testnode :test32 [
     ]
 ].
 =end
+  end
+
+  def test_literals
+    document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
+    document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
+
+    document << IqRdf::testemann do |t|
+      t.Foaf::knows(:testefrau)
+      t.Foaf.nick("Testy")
+      t.Foaf.lastname("Testemann", :lang => :none)
+      t.age(32)
+      t.married(false)
+      t.weight(65.8)
+      t.complex(IqRdf::Literal.new("A very complex type", nil, URI.parse("http://this.com/is#complex")))
+      t.complex2(IqRdf::Literal.new("Shorter form", nil, IqRdf::myDatatype))
+      t.quotes("\"I'm \\quoted\"")
+      t.line_breaks("I'm written\nover two lines")
+      t.some_literal(IqRdf::Literal.new("text", :de))
     end
 
-    def test_literals
-      document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
-      document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
-
-      document << IqRdf::testemann do |t|
-        t.Foaf::knows(:testefrau)
-        t.Foaf.nick("Testy")
-        t.Foaf.lastname("Testemann", :lang => :none)
-        t.age(32)
-        t.married(false)
-        t.weight(65.8)
-        t.complex(IqRdf::Literal.new("A very complex type", nil, URI.parse("http://this.com/is#complex")))
-        t.complex2(IqRdf::Literal.new("Shorter form", nil, IqRdf::myDatatype))
-        t.quotes("\"I'm \\quoted\"")
-        t.line_breaks("I'm written\nover two lines")
-        t.some_literal(IqRdf::Literal.new("text", :de))
-      end
-
-      assert_match(<<rdf, document.to_xml)
+    assert_match(<<rdf, document.to_xml)
   <rdf:Description rdf:about="http://www.test.de/testemann">
     <foaf:knows rdf:resource="http://www.test.de/testefrau"/>
     <foaf:nick>Testy</foaf:nick>
@@ -192,7 +192,25 @@ over two lines</line_breaks>
     <some_literal xml:lang="de">text</some_literal>
   </rdf:Description>
 rdf
+  end
+
+  def test_full_uri_predicates
+    assert_raise RuntimeError do
+      document = IqRdf::Document.new('http://www.test.de/')
+      document << IqRdf::testemann.build_full_uri_predicate(URI.parse("http://www.test.org/12"), 42)
+      document.to_xml
     end
+
+    document = IqRdf::Document.new('http://www.test.de/')
+
+    document << IqRdf::testemann.build_full_uri_predicate(URI.parse("http://www.test.org/hoho"), 42)
+
+    assert_match(<<-rdf, document.to_xml)
+  <rdf:Description rdf:about="http://www.test.de/testemann">
+    <ns0:hoho xmlns:ns0="http://www.test.org/" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">42</ns0:hoho>
+  </rdf:Description>
+    rdf
+  end
 
   def test_blank_nodes
     document = IqRdf::Document.new('http://www.test.de/')
@@ -204,7 +222,7 @@ rdf
         subnode.title("blubb") # title "blubb"
       end # ]
     end # ]
-    assert_match(<<rdf, document.to_xml)
+    assert_match(<<-rdf, document.to_xml)
   <rdf:Description rdf:about=\"http://www.test.de/testnode\">
     <test32>
       <rdf:Description>
@@ -218,7 +236,7 @@ rdf
       </rdf:Description>
     </test32>
   </rdf:Description>
-rdf
+    rdf
   end
 
-  end
+end
