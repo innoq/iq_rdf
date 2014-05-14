@@ -73,7 +73,9 @@ module IqRdf
           sublist::rdf.build_predicate("type", IqRdf::Rdf::build_uri("List")) # _:b* a rdf:List
           sublist::rdf.first(current_element) # _:b* rdf:first <...>
           last = i + 1 == total
-          unless last
+          if last
+            sublist::rdf.rest(IqRdf::Rdf::build_uri("nil"))
+          else
             new_sublist = IqRdf::BlankNode.new
             sublist::rdf.rest(new_sublist) # _:b* rdf:rest _:b*
           end
