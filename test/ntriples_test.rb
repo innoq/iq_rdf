@@ -18,7 +18,7 @@ $LOAD_PATH << File.dirname(__FILE__)
 
 require 'test_helper'
 
-class NTriplesTest < Test::Unit::TestCase
+class NTriplesTest < Minitest::Test
 
   def test_basics
     document = IqRdf::Document.new('http://example.org/')

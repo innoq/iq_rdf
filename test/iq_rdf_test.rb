@@ -16,16 +16,16 @@ $LOAD_PATH << File.dirname(__FILE__)
 
 require 'test_helper'
 
-class IqRdfTest < Test::Unit::TestCase
+class IqRdfTest < Minitest::Test
 
   def test_namespace_definitions
-    assert_raise(URI::InvalidURIError) { IqRdf::Document.new(12345) }
+    assert_raises(URI::InvalidURIError) { IqRdf::Document.new(12345) }
 
     document = IqRdf::Document.new("http://default-namespace.com/")
 
-    assert_raise(ArgumentError) { document.namespaces :nohash }
-    assert_raise(ArgumentError) { document.namespaces "wrong" => "http://www.innoq.com/" }
-    assert_raise(URI::InvalidURIError) { document.namespaces :correct => 12 }
+    assert_raises(ArgumentError) { document.namespaces :nohash }
+    assert_raises(ArgumentError) { document.namespaces "wrong" => "http://www.innoq.com/" }
+    assert_raises(URI::InvalidURIError) { document.namespaces :correct => 12 }
 
     document.namespaces :innoq => "http://www.innoq.com/"
     document.namespaces :uba => "http://www.uba.de/"
@@ -52,7 +52,7 @@ class IqRdfTest < Test::Unit::TestCase
   def test_disallow_nested_definitions
     IqRdf::Document.new('http://www.umweltprobenbank.de/').namespaces :foaf => 'http://xmlns.com/foaf/0.1/'
 
-    assert_raise(ArgumentError) {IqRdf::testemann.Foaf::knows(IqRdf::testefrau.Foaf::knows(IqRdf::someone_else)) }
+    assert_raises(ArgumentError) {IqRdf::testemann.Foaf::knows(IqRdf::testefrau.Foaf::knows(IqRdf::someone_else)) }
   end
 
 end

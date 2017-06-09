@@ -16,6 +16,7 @@ GEM
     i18n (0.6.1)
     json (1.8.6)
     json (1.8.6-java)
+    minitest (5.7.0)
     multi_json (1.5.0)
     rake (0.9.2.2)
     rdoc (3.12)
@@ -28,6 +29,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   iq_rdf!
+  minitest
   rake
   rdoc
 
