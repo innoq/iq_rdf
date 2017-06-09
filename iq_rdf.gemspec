@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
   s.add_dependency "builder"
   s.add_dependency "activesupport"
 
+  s.add_development_dependency "minitest"
+
   s.files = %w(LICENSE README.md Rakefile iq_rdf.gemspec) + Dir.glob("{lib,rails,test}/**/*")
   s.test_files = Dir.glob("{test}/**/*")
   s.executables = Dir.glob("{bin}/**/*")

@@ -16,7 +16,7 @@ $LOAD_PATH << File.dirname(__FILE__)
 
 require 'test_helper'
 
-class XmlTest < Test::Unit::TestCase
+class XmlTest < Minitest::Test
 
   def test_basic_xml_output
     document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
@@ -40,7 +40,7 @@ rdf
   def test_full_uri_subject_xml_output
     document = IqRdf::Document.new('http://www.test.de/')
 
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       IqRdf::build_full_uri_subject("bla")
     end
 
@@ -195,7 +195,7 @@ rdf
   end
 
   def test_full_uri_predicates
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       document = IqRdf::Document.new('http://www.test.de/')
       document << IqRdf::testemann.build_full_uri_predicate(URI.parse("http://www.test.org/12"), 42)
       document.to_xml

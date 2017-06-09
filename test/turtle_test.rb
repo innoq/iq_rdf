@@ -16,7 +16,7 @@ $LOAD_PATH << File.dirname(__FILE__)
 
 require 'test_helper'
 
-class TurtleTest < Test::Unit::TestCase
+class TurtleTest < Minitest::Test
 
   def test_basic_turtle_output
     document = IqRdf::Document.new('http://www.test.de/', :lang => :de)
@@ -42,7 +42,7 @@ rdf
   def test_full_uri_subject_turtle_output
     document = IqRdf::Document.new('http://www.test.de/')
 
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       IqRdf::build_full_uri_subject("bla")
     end
 
