@@ -17,16 +17,16 @@ def IqRdf.rails_template(template)
   document = IqRdf::Document.new()
   #{template.source}
   if params[:format].to_s == "ttl"
-    controller.response.headers["Content-Type"] ||= 'text/turtle'
+    controller.response.headers["Content-Type"] ||= 'text/turtle;charset=utf-8'
     document.to_turtle
   elsif  params[:format].to_s == "nt"
-    controller.response.headers["Content-Type"] ||= 'text/plain'
+    controller.response.headers["Content-Type"] ||= 'text/plain;charset=utf-8'
     document.to_ntriples
   elsif params[:format].to_s == "rdf"
-    controller.response.headers["Content-Type"] ||= 'application/xml+rdf'
+    controller.response.headers["Content-Type"] ||= 'application/xml+rdf;charset=utf-8'
     document.to_xml
   else # Default => turtle
-    controller.response.headers["Content-Type"] ||= 'text/turtle'
+    controller.response.headers["Content-Type"] ||= 'text/turtle;charset=utf-8'
     document.to_turtle
   end
   EOV
@@ -54,6 +54,6 @@ module ActionView
     ActionView::Template.register_template_handler('iqrdf', ActionView::TemplateHandlers::IqRdf)
 
   end
- 
+
 
 end
