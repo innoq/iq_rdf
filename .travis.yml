@@ -2,14 +2,9 @@ language: ruby
 cache: bundler
 bundler_args: "--without production --retry 3"
 rvm:
-  - 1.8.7
-  - 1.9.3
-  - 2.0
-  - 2.1
   - 2.2
   - 2.3
   - 2.4
-  - jruby-18mode
   - jruby-19mode
 
 script: bundle exec rake test
@@ -23,6 +18,4 @@ notifications:
     - iqvoc@innoq.com
 matrix:
   allow_failures:
-    - rvm: 1.8.7
-    - rvm: jruby-18mode
     - rvm: ruby-head
