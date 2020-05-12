@@ -1,5 +1,7 @@
 # IqRdf - RDF Renderering for Ruby and Rails
 
+![CI](https://github.com/innoq/iq_rdf/workflows/CI/badge.svg)
+
 IqRdf is a RDF renderer for Ruby and Rails. You can use it in any Ruby
 environment to render Trurtle-, N-Triple- (not implemented yet) or XML-RDF.
 
