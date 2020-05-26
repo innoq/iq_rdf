@@ -19,4 +19,4 @@ gemspec
 
 gem 'rake'
 gem 'rdoc'
-gem 'activesupport', '~> 5.2.0'
+gem 'activesupport', '~> 6.0.3'
