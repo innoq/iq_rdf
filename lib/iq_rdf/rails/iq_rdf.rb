@@ -12,10 +12,12 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-def IqRdf.rails_template(template)
+def IqRdf.rails_template(template, source = nil)
+  source ||= template.source
+
   <<-EOV
   document = IqRdf::Document.new()
-  #{template.source}
+  #{source}
   if params[:format].to_s == "ttl"
     controller.response.headers["Content-Type"] ||= 'text/turtle;charset=utf-8'
     document.to_turtle
@@ -34,7 +36,16 @@ end
 
 module ActionView
 
-  if Rails.version >= "3"
+  if Rails.version >= "6"
+    class Template::Handlers::IqRdf
+      # see https://github.com/rails/rails/commit/28f88e0074f473f58c2d3fd54cb3daff81027c12
+      def self.call(template, source)
+        IqRdf.rails_template(template, source)
+      end
+    end
+    ActionView::Template.register_template_handler('iqrdf', ActionView::Template::Handlers::IqRdf)
+
+  elsif Rails.version >= "3"
 
     class Template::Handlers::IqRdf
       def self.call(template)
