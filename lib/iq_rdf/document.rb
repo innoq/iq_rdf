@@ -25,6 +25,7 @@ module IqRdf
       @document_language = options[:lang]
 
       @nodes = []
+      @config = {}
     end
 
     def namespaces(namespaces)
@@ -37,6 +38,10 @@ module IqRdf
         register_namespace(name, uri_prefix)
       end
       self
+    end
+
+    def config(config = {})
+      @config = config
     end
 
     def <<(node)
@@ -163,6 +168,9 @@ module IqRdf
           pref = ";\n" + indent
         end
         s << ".\n"
+        if @config[:empty_line_between_triples]
+          s << "\n"
+        end
       end
       s
     end

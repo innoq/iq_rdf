@@ -244,4 +244,22 @@ eg:dsd a qb:DataStructureDefinition;
 rdf
   end
 
+  def test_config
+    document = IqRdf::Document.new('http://www.test.de/')
+    document.config(empty_line_between_triples: true)
+
+    document << IqRdf::testemann.myCustomNote("This is an example", :lang => :en)
+    document << IqRdf::testemann.myCustomNote("Zweites Beispiel", :lang => :de)
+
+    assert_equal(<<rdf, document.to_turtle)
+@prefix : <http://www.test.de/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+:testemann :myCustomNote "This is an example"@en.
+
+:testemann :myCustomNote "Zweites Beispiel"@de.
+
+rdf
+  end
+
 end
