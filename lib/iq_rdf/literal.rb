@@ -34,8 +34,8 @@ module IqRdf
       end
     end
 
-    def to_s(parent_lang = nil)
-      lang = @lang || parent_lang # Use the Literals lang when given
+    def to_s(options = {})
+      lang = @lang || options[:lang] # Use the Literals lang when given
       lang = (lang && lang != :none) ? "@#{lang}" : ""
       quote = @obj.to_s.include?("\n") ? '"""' : '"'
       datatype = if @datatype.is_a?(::URI)

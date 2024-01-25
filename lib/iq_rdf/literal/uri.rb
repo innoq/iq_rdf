@@ -7,7 +7,7 @@ module IqRdf
         super(uri)
       end
 
-      def to_s(parent_lang = nil)
+      def to_s(options = {})
         "<#{@obj.to_s}>"
       end
 

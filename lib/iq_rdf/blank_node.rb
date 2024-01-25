@@ -26,12 +26,22 @@ module IqRdf
 
     end
 
-    def to_s(parent_lang = nil)
-      "[\n#{(nodes.map{|pred| "#{pred} #{pred.nodes.map{|o| o.to_s(pred.lang || parent_lang)}.join(", ")}"}.join(";\n")).gsub(/^/, "    ")}\n]"
+    def to_s(options = {})
+      base_indent = options[:indent] || ""
+      predicate_indent =  base_indent + "".ljust(4)
+
+      predicates = nodes.map { |p| format_predicate(p, indent: predicate_indent, lang: options[:lang]) }
+           .join(";\n")
+
+      "[\n#{predicates}\n#{base_indent} ]"
     end
 
     def build_predicate(*args, &block)
       IqRdf::PredicateNamespace.new(self, IqRdf::Default).build_predicate(*args, &block)
+    end
+
+    def build_predicate_with_ns(namespace, *args, &block)
+      IqRdf::PredicateNamespace.new(self, namespace).build_predicate(*args, &block)
     end
 
     def build_xml(xml, &block)
@@ -44,6 +54,16 @@ module IqRdf
             end
           end
         })
+    end
+
+    private
+
+    def format_predicate(predicate, options = {})
+      subjects = predicate.nodes
+                          .map { |object| object.to_s(indent: options[:indent], lang: predicate.lang || options[:lang]) }
+                          .join(", ")
+
+      "#{options[:indent]} #{predicate} #{subjects}"
     end
 
   end

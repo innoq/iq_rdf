@@ -25,8 +25,8 @@ module IqRdf
       end
     end
 
-    def to_s(lang = nil)
-      "(#{@elements.map{|e| e.to_s(lang)}.join(" ")})"
+    def to_s(options = {})
+      "(#{@elements.map{|e| e.to_s(options)}.join(" ")})"
     end
 
     def build_xml(xml, elements = nil, &block)

@@ -7,7 +7,7 @@ module IqRdf
         super(num, nil, ::URI.parse(num.is_a?(Integer) ? "http://www.w3.org/2001/XMLSchema#integer" : "http://www.w3.org/2001/XMLSchema#decimal"))
       end
 
-      def to_s(parent_lang = nil)
+      def to_s(options = {})
         @obj.to_s
       end
 

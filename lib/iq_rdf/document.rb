@@ -143,15 +143,24 @@ module IqRdf
         s << "@prefix #{namespace.turtle_token}: <#{namespace.uri_prefix}>.\n"
       end
       s << "\n"
-      @nodes.each do |node|
-        pref = "#{node.to_s(@document_language)}"
-        if node.rdf_type
-          s << "#{pref} a #{node.rdf_type}"
-          pref = ";\n" + "".ljust(node.to_s(@document_language).length)
+      @nodes.each do |subject|
+        pref = subject.to_s(@document_language)
+        indent = "".ljust(pref.length)
+
+        # Render subject, if it is defined as a RDF-type.
+        if subject.rdf_type
+          s << "#{pref} a #{subject.rdf_type}"
+          pref = ";\n" + indent
         end
-        node.nodes.each do |predicate|
-          s << "#{pref} #{predicate.to_s} #{predicate.nodes.map{|o| o.to_s(predicate.lang || node.lang || @document_language)}.join(", ")}"
-          pref = ";\n" + "".ljust(node.to_s(@document_language).length)
+
+        # Render all predicates and their associated objects
+        subject.nodes.each do |predicate|
+          objects = predicate.nodes.map { |object| object.to_s(indent: indent, lang: predicate.lang || subject.lang || @document_language) }
+                             .join(", ")
+
+          s << "#{pref} #{predicate.to_s} #{objects}"
+
+          pref = ";\n" + indent
         end
         s << ".\n"
       end

@@ -1,7 +1,9 @@
 .DS_Store
 .svn
+.idea
 doc
 .specification
 nbproject
 pkg
 Gemfile.lock
+.ruby-version

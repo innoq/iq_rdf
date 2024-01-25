@@ -117,11 +117,11 @@ upb:xkfkrl a skos:Concept;
            :testIt (:hello :goodbye "bla"@de), "blubb"@de;
            :anotherTest <http://www.test.de/foo>.
 skos:testnode :test32 [
-    :title "dies ist ein test"@de;
-    :sub [
-        :title "blubb"@de
-    ]
-].
+                  :title "dies ist ein test"@de;
+                  :sub [
+                      :title "blubb"@de
+                  ]
+              ].
 rdf
   end
 
@@ -207,12 +207,40 @@ rdf
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 :testnode :test32 [
-    :title "dies ist ein test";
-    :test "Another test";
-    :sub [
-        :title "blubb"
-    ]
-].
+              :title "dies ist ein test";
+              :test "Another test";
+              :sub [
+                  :title "blubb"
+              ]
+          ].
+rdf
+  end
+
+  def test_blank_nodes_with_different_ns
+    document = IqRdf::Document.new('http://www.test.de/')
+    document.namespaces(qb: 'http://purl.org/linked-data/cube#')
+    document.namespaces(eg: 'http://www.example.com')
+
+    document << IqRdf::Eg.build_uri('dsd', IqRdf::Qb.build_uri('DataStructureDefinition')) do |ds|
+      ds.add_blank_node(IqRdf::Qb, :component) do |blank_node|
+        blank_node.build_predicate_with_ns(IqRdf::Qb, :dimension, IqRdf::Eg.build_uri('refArea'))
+        blank_node.build_predicate_with_ns(IqRdf::Qb, :order, 1)
+        blank_node.build_predicate_with_ns(IqRdf::Eg, :cost, 2.25)
+      end
+    end
+
+    assert_equal(<<rdf, document.to_turtle)
+@prefix : <http://www.test.de/>.
+@prefix eg: <http://www.example.com>.
+@prefix qb: <http://purl.org/linked-data/cube#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+eg:dsd a qb:DataStructureDefinition;
+       qb:component [
+           qb:dimension eg:refArea;
+           qb:order 1;
+           eg:cost 2.25
+       ].
 rdf
   end
 
