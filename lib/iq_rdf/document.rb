@@ -145,16 +145,16 @@ module IqRdf
     def to_turtle
       s = ""
       @namespaces.values.sort{ |n1, n2| n1.turtle_token <=> n2.turtle_token }.each do |namespace|
-        s << "@prefix #{namespace.turtle_token}: <#{namespace.uri_prefix}>.\n"
+        s += "@prefix #{namespace.turtle_token}: <#{namespace.uri_prefix}>.\n"
       end
-      s << "\n"
+      s += "\n"
       @nodes.each do |subject|
         pref = subject.to_s(@document_language)
         indent = "".ljust(pref.length)
 
         # Render subject, if it is defined as a RDF-type.
         if subject.rdf_type
-          s << "#{pref} a #{subject.rdf_type}"
+          s += "#{pref} a #{subject.rdf_type}"
           pref = ";\n" + indent
         end
 
@@ -163,13 +163,13 @@ module IqRdf
           objects = predicate.nodes.map { |object| object.to_s(indent: indent, lang: predicate.lang || subject.lang || @document_language) }
                              .join(", ")
 
-          s << "#{pref} #{predicate.to_s} #{objects}"
+          s += "#{pref} #{predicate.to_s} #{objects}"
 
           pref = ";\n" + indent
         end
-        s << ".\n"
+        s += ".\n"
         if @config[:empty_line_between_triples]
-          s << "\n"
+          s += "\n"
         end
       end
       s
