@@ -20,6 +20,7 @@ gemspec
 gem 'rake'
 gem 'rdoc'
 gem 'activesupport'
+gem 'ostruct'
 
 group :test do
   gem 'mutex_m'
