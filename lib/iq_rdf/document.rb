@@ -15,6 +15,10 @@
 module IqRdf
   class Document
 
+    def self.stream(io, format, **opts, &block)
+      IqRdf::StreamingWriter.open(io, format, **opts, &block)
+    end
+
     def initialize(default_namespace_uri_prefix = nil, *args)
       options = args.last.is_a?(::Hash) ? args.pop : {}
       raise ArgumentError, "If given, parameter :lang has to be a Symbol" unless options[:lang].nil? || options[:lang].is_a?(Symbol)
