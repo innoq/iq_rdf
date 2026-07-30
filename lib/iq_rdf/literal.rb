@@ -15,6 +15,14 @@
 module IqRdf
   class Literal
 
+    NTRIPLES_ESCAPE_MAP = {
+      "\\" => "\\\\",
+      '"'  => '\\"',
+      "\n" => "\\n",
+      "\r" => "\\r",
+      "\t" => "\\t"
+    }.freeze
+
     def initialize(obj, lang = nil, datatype = nil)
       raise "#{datatype.inspect} is not an URI" unless datatype.nil? || datatype.is_a?(::URI) || datatype.is_a?(IqRdf::Uri)
       @obj = obj
@@ -50,7 +58,6 @@ module IqRdf
     end
 
     def to_ntriples(parent_lang = nil)
-      quote = @obj.to_s.include?("\n") ? '"""' : '"'
       suffix = if @datatype.is_a?(::URI)
         "^^<#{@datatype.to_s}>"
       elsif @datatype.is_a?(IqRdf::Uri)
@@ -60,7 +67,7 @@ module IqRdf
         (lang && lang != :none) ? "@#{lang}" : ""
       end
 
-      "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{suffix}"
+      "\"#{@obj.to_s.gsub(/[\\"\n\r\t]/, NTRIPLES_ESCAPE_MAP)}\"#{suffix}"
     end
 
     def build_xml(xml, &block)

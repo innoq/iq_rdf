@@ -202,8 +202,7 @@ _:b2 <http://www.umweltprobenbank.de/title> "blubb"@de .
 <http://www.test.de/testemann> <http://www.test.de/complex> "A very complex type"^^<http://this.com/is#complex> .
 <http://www.test.de/testemann> <http://www.test.de/complex2> "Shorter form"^^<http://www.test.de/myDatatype> .
 <http://www.test.de/testemann> <http://www.test.de/quotes> "\\"I'm \\\\quoted\\""@de .
-<http://www.test.de/testemann> <http://www.test.de/line_breaks> """I'm written
-over two lines"""@de .
+<http://www.test.de/testemann> <http://www.test.de/line_breaks> "I'm written\\nover two lines"@de .
 <http://www.test.de/testemann> <http://www.test.de/some_literal> "text"@de .
 rdf
   end
