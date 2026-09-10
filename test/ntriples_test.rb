@@ -101,13 +101,10 @@ _:b2 <http://www.test.de/title> "blubb" .
     document << IqRdf::testemann.testIt([IqRdf::hello, IqRdf::goodbye, "bla"])
 
     assert_equal(<<-rdf.strip, document.to_ntriples.strip)
-_:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
 _:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://test.de/hello> .
 _:b2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:b3 .
-_:b3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
 _:b3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://test.de/goodbye> .
 _:b3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:b4 .
-_:b4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
 _:b4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "bla" .
 _:b4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
 <http://test.de/testemann> <http://test.de/testIt> _:b2 .

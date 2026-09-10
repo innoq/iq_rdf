@@ -77,7 +77,9 @@ module IqRdf
         sublist = list
         total = res.elements.length
         res.elements.each_with_index do |current_element, i|
-          sublist::rdf.build_predicate("type", IqRdf::Rdf::build_uri("List")) # _:b* a rdf:List
+          # No a rdf:List here: rdf:first/rdf:rest/rdf:nil already define the
+          # collection, and Turtle's ( ... ) form cannot express the type at
+          # all - emitting it made the same data count differently per format.
           sublist::rdf.first(current_element) # _:b* rdf:first <...>
           last = i + 1 == total
           if last

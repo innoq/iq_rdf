@@ -103,15 +103,15 @@ rdf
   </rdf:Description>
   <rdf:Description rdf:about="http://www.umweltprobenbank.de/testemann">
     <testIt>
-      <rdf:List>
+      <rdf:Description>
         <rdf:first rdf:resource="http://www.umweltprobenbank.de/hello"/>
         <rdf:rest>
-          <rdf:List>
+          <rdf:Description>
             <rdf:first>bla</rdf:first>
             <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-          </rdf:List>
+          </rdf:Description>
         </rdf:rest>
-      </rdf:List>
+      </rdf:Description>
     </testIt>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.upb.de/u1023">

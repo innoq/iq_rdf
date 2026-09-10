@@ -33,7 +33,9 @@ module IqRdf
       elements ||= @elements.dup
       block.call({},
         lambda {
-          xml.rdf :List do
+          # rdf:Description, not rdf:List: a typed element would assert
+          # rdf:type rdf:List, which Turtle's ( ... ) form cannot express
+          xml.rdf :Description do
             elements.shift.build_xml(xml) do |*args|
               xml.rdf(:first, *args)
             end
