@@ -163,6 +163,63 @@ over two lines"""@de;
 rdf
   end
 
+  # A carriage return without a newline used to end up raw inside a short
+  # string, which is invalid Turtle and made parsers drop the statement.
+  def test_control_characters_in_literals
+    document = IqRdf::Document.new('http://www.test.de/', :lang => :none)
+
+    document << IqRdf::testemann do |t|
+      t.carriage_return("first\rsecond")
+      t.tab("left\tright")
+      t.long_with_quote("first\nends with \"")
+      t.long_with_three_quotes("first\nwith \"\"\" inside")
+      t.long_with_backslash("first\nC:\\temp")
+    end
+
+    assert_equal(<<rdf, document.to_turtle)
+@prefix : <http://www.test.de/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+:testemann :carriage_return """first\rsecond""";
+           :tab "left\\tright";
+           :long_with_quote """first
+ends with \\\"""";
+           :long_with_three_quotes """first
+with \\\"\\\"\\\" inside""";
+           :long_with_backslash """first
+C:\\\\temp""".
+rdf
+  end
+
+  # The assertions above compare against an expected string, which cements the
+  # current output but says nothing about whether it is valid Turtle. Parsing
+  # the output back does: it catches escaping that a parser rejects, or that
+  # silently changes the value.
+  def test_literals_survive_a_round_trip
+    {
+      "plain" => "just text",
+      "newline" => "first\nsecond",
+      "carriage return" => "first\rsecond",
+      "carriage return and newline" => "first\r\nsecond",
+      "tab" => "left\tright",
+      "quote" => 'said "hello"',
+      "trailing quote" => 'ends with "',
+      "three quotes" => 'a """ b',
+      "backslash" => 'C:\\temp',
+      "newline and quote" => "first\nends with \"",
+      "newline and three quotes" => "first\nwith \"\"\" inside",
+      "newline and backslash" => "first\nC:\\temp",
+    }.each do |name, value|
+      document = IqRdf::Document.new('http://www.test.de/', :lang => :none)
+      document << IqRdf::testemann.some_predicate(value)
+
+      statements = RDF::Turtle::Reader.new(document.to_turtle, validate: true).to_a
+      assert_equal 1, statements.size, "expected one statement for #{name}"
+      assert_equal value, statements.first.object.value,
+          "#{name} did not survive the round trip"
+    end
+  end
+
   def test_supress_if_empty_otpion
     document = IqRdf::Document.new('http://www.test.de/')
     document.namespaces :foaf => 'http://xmlns.com/foaf/0.1/'

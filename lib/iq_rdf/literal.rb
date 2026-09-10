@@ -15,12 +15,19 @@
 module IqRdf
   class Literal
 
-    NTRIPLES_ESCAPE_MAP = {
+    # Turtle accepts the same escapes as N-Triples, so both formats share this
+    ESCAPE_MAP = {
       "\\" => "\\\\",
       '"'  => '\\"',
       "\n" => "\\n",
       "\r" => "\\r",
       "\t" => "\\t"
+    }.freeze
+
+    # Inside """...""" line breaks and tabs are legal as they are
+    LONG_ESCAPE_MAP = {
+      "\\" => "\\\\",
+      '"'  => '\\"'
     }.freeze
 
     def initialize(obj, lang = nil, datatype = nil)
@@ -45,7 +52,6 @@ module IqRdf
     def to_s(options = {})
       lang = @lang || options[:lang] # Use the Literals lang when given
       lang = (lang && lang != :none) ? "@#{lang}" : ""
-      quote = @obj.to_s.include?("\n") ? '"""' : '"'
       datatype = if @datatype.is_a?(::URI)
         "^^<#{@datatype.to_s}>"
       elsif @datatype.is_a?(IqRdf::Uri)
@@ -54,7 +60,17 @@ module IqRdf
         ""
       end
 
-      "#{quote}#{@obj.to_s.gsub("\\", "\\\\\\\\").gsub(/"/, "\\\"")}#{quote}#{lang}#{datatype}"
+      value = @obj.to_s
+
+      if value.match?(/[\n\r]/)
+        # A long string keeps line breaks readable, which is the point of
+        # Turtle over N-Triples. Its grammar allows raw line breaks and tabs,
+        # so only backslashes and quotes need escaping - escaping every quote
+        # also rules out a run of three ending the string prematurely.
+        %("""#{value.gsub(/[\\"]/, LONG_ESCAPE_MAP)}"""#{lang}#{datatype})
+      else
+        %("#{value.gsub(/[\\"\n\r\t]/, ESCAPE_MAP)}"#{lang}#{datatype})
+      end
     end
 
     def to_ntriples(parent_lang = nil)
@@ -67,7 +83,7 @@ module IqRdf
         (lang && lang != :none) ? "@#{lang}" : ""
       end
 
-      "\"#{@obj.to_s.gsub(/[\\"\n\r\t]/, NTRIPLES_ESCAPE_MAP)}\"#{suffix}"
+      "\"#{@obj.to_s.gsub(/[\\"\n\r\t]/, ESCAPE_MAP)}\"#{suffix}"
     end
 
     def build_xml(xml, &block)

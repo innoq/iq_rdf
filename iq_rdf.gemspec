@@ -32,6 +32,8 @@ Gem::Specification.new do |s|
   s.add_dependency "activesupport"
 
   s.add_development_dependency "minitest"
+  # parses generated output back, so that tests catch invalid serializations
+  s.add_development_dependency "rdf-turtle"
 
   s.files = %w(LICENSE README.md Rakefile iq_rdf.gemspec) + Dir.glob("{lib,rails,test}/**/*")
   s.test_files = Dir.glob("{test}/**/*")
